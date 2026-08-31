@@ -11,10 +11,21 @@
     <%-- ClientIDMode="Static" is set at the Page level above, so every runat="server"
          control below renders with its literal ID — no ctl00$MainContent$... mangling —
          which is what jobcard-wizard.js's jQuery selectors depend on. --%>
-    <input type="hidden" id="hdnSelectedVehicleId" runat="server" />
-    <input type="hidden" id="hdnCheckedServiceIds" runat="server" />
+    <input type="hidden" id="hdnSelectedVehicleId"  runat="server" />
+    <input type="hidden" id="hdnCheckedServiceIds"  runat="server" />
+    <%-- Three additional hidden fields so the Review step's Create button can build its
+         POST payload without relying on controls from earlier steps that are no longer
+         in the DOM.  captureWizardState() in jobcard-wizard.js writes to all five fields
+         on every wizard navigation click; btnCreateJobCard reads from these three. --%>
+    <input type="hidden" id="hdnCheckedServiceData" runat="server" />
+    <input type="hidden" id="hdnScheduledDate"      runat="server" />
+    <input type="hidden" id="hdnTechnicianId"       runat="server" />
 
-    <asp:Label ID="lblWizardError" runat="server" CssClass="msc-message msc-message-error" Visible="false" Style="display:none;" />
+    <%-- Visible="false" was intentionally removed: that attribute causes ASP.NET to omit the
+         element from HTML entirely, so jQuery's showWizardError() could never find or show it.
+         display:none keeps it hidden until either the server (ShowWizardError in code-behind)
+         or the client (showWizardError in jobcard-wizard.js) makes it visible. --%>
+    <asp:Label ID="lblWizardError" runat="server" CssClass="msc-message msc-message-error" Style="display:none;" />
 
     <%-- asp:Wizard's Next/Previous cause postbacks. Wrapping it in an UpdatePanel
          makes those PARTIAL postbacks instead of full page reloads, so Site.Master

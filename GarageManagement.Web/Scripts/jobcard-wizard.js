@@ -79,8 +79,13 @@ $(function () {
                 $servicesList.append($item);
             });
             recalculateTotal();
-        }).fail(function () {
-            $servicesList.append('<p class="msc-message msc-message-error">Unable to load services.</p>');
+            // After restoring checked state, re-snapshot service data so hdnCheckedServiceData
+            // reflects the restored selection (the user may have navigated back to this step).
+            captureServiceData();
+        }).fail(function (xhr) {
+            var message = (xhr.responseJSON && xhr.responseJSON.detail) ||
+                'Unable to load services.';
+            $servicesList.append($('<p class="msc-message msc-message-error"></p>').text(message));
         });
     }
 
@@ -103,73 +108,60 @@ $(function () {
 
     // ---- Services step (Flow D) ----
     $(document).on('change', '#ddlCategory', function () {
+        // When the user manually changes the category, clear the service list
+        // (no restore needed - they're making a fresh selection).
         populateServices($(this).val(), []);
     });
 
-    $(document).on('change', '.msc-service-checkbox', recalculateTotal);
-
-    // ---- Persist client-only state across the Wizard's partial postbacks ----
-    // Before each partial postback (clicking Next/Previous/the Calendar), stash
-    // the current Vehicle selection and checked Service IDs into hidden fields.
-    // After the postback completes, ddlCustomer/ddlCategory's OWN selected
-    // values already survived automatically (they're real server controls,
-    // persisted via ViewState) — but their AJAX-populated child options did
-    // not, so re-fetch and then restore from the hidden fields.
-    if (window.Sys && window.Sys.WebForms) {
-        var prm = Sys.WebForms.PageRequestManager.getInstance();
-
-        prm.add_beginRequest(function () {
-            $('#hdnSelectedVehicleId').val($('#ddlVehicle').val() || '');
-
-            var checkedIds = $('.msc-service-checkbox:checked').map(function () {
-                return $(this).attr('data-service-id');
-            }).get();
-            $('#hdnCheckedServiceIds').val(checkedIds.join(','));
-        });
-
-        prm.add_endRequest(function () {
-            var customerId = $('#ddlCustomer').val();
-            if (customerId) {
-                populateVehicles(customerId, $('#hdnSelectedVehicleId').val());
-            }
-
-            var categoryId = $('#ddlCategory').val();
-            var checkedIdsRaw = $('#hdnCheckedServiceIds').val();
-            var checkedIds = checkedIdsRaw ? checkedIdsRaw.split(',') : [];
-            if (categoryId) {
-                populateServices(categoryId, checkedIds);
-            }
-        });
-    }
+    $(document).on('change', '.msc-service-checkbox', function () {
+        recalculateTotal();
+        captureServiceData();   // keep hdnCheckedServiceData current as the user ticks boxes
+    });
 
     // ---- Final step: POST the whole job card to the API instead of a postback ----
+    // Register this BEFORE the state-management block. A failure wiring the MutationObserver
+    // must never prevent the Create button from working.
     $(document).on('click', '#btnCreateJobCard', function (e) {
         e.preventDefault();
 
-        var vehicleId = parseInt($('#ddlVehicle').val(), 10);
+        // -----------------------------------------------------------------------
+        // FIX: asp:Wizard only renders the ACTIVE step's content.  On the Review
+        // step, #ddlVehicle, .msc-service-checkbox, #txtScheduledDate, and
+        // #ddlTechnician are all in earlier steps and are NOT in the DOM.
+        // Reading them directly always yields undefined/empty, so we read from
+        // the hidden fields that captureWizardState() and captureServiceData()
+        // keep up-to-date on every navigation click and checkbox change.
+        // -----------------------------------------------------------------------
+
+        var vehicleId = parseInt($('#hdnSelectedVehicleId').val(), 10);
         if (!vehicleId) {
             showWizardError('Please select a vehicle before continuing.');
             return;
         }
 
+        var servicesRaw = $('#hdnCheckedServiceData').val();
         var services = [];
-        $('.msc-service-checkbox:checked').each(function () {
-            services.push({
-                serviceID: parseInt($(this).attr('data-service-id'), 10),
-                qty: 1,
-                price: parseFloat($(this).attr('data-price'))
-            });
-        });
+        try {
+            services = servicesRaw ? JSON.parse(servicesRaw) : [];
+        } catch (ex) {
+            services = [];
+        }
 
         if (services.length === 0) {
             showWizardError('Select at least one service.');
             return;
         }
 
+        var scheduledDate = $('#hdnScheduledDate').val();
+        if (!scheduledDate) {
+            showWizardError('Please select a scheduled date.');
+            return;
+        }
+
         var payload = {
             vehicleID: vehicleId,
-            scheduledDate: $('#txtScheduledDate').val(),
-            technicianID: $('#ddlTechnician').val() ? parseInt($('#ddlTechnician').val(), 10) : null,
+            scheduledDate: scheduledDate,
+            technicianID: $('#hdnTechnicianId').val() ? parseInt($('#hdnTechnicianId').val(), 10) : null,
             services: services,
             parts: [] // populated the same way from a Parts CheckBoxList once that step is built
         };
@@ -191,4 +183,86 @@ $(function () {
             $('#btnCreateJobCard').prop('disabled', false).text('Create Job Card');
         });
     });
+
+    // ---- Persist client-only state across the Wizard's partial postbacks ----
+    // Do not depend on Sys.WebForms/PageRequestManager here.  Some ScriptManager
+    // load orders do not expose it when this page-level script executes.  Saving
+    // state on the native navigation click works for both async and full postbacks.
+
+    // captureServiceData() is called independently whenever checkboxes change so
+    // hdnCheckedServiceData stays current without waiting for a navigation click.
+    function captureServiceData() {
+        // Guard: only overwrite when the service list is actually in the DOM (i.e. the
+        // user is on step 2).  Without this, navigating away from any other step would
+        // zero-out the previously captured service data.
+        if (!$('#chkServices').length) { return; }
+
+        var checkedIds = [];
+        var serviceData = [];
+        $('.msc-service-checkbox:checked').each(function () {
+            var id = $(this).attr('data-service-id');
+            var price = $(this).attr('data-price');
+            checkedIds.push(id);
+            serviceData.push({
+                serviceID: parseInt(id, 10),
+                qty: 1,
+                price: parseFloat(price)
+            });
+        });
+        $('#hdnCheckedServiceIds').val(checkedIds.join(','));
+        // Full {serviceID, qty, price} objects so btnCreateJobCard can POST without
+        // re-querying checkboxes that are off-screen on the Review step.
+        $('#hdnCheckedServiceData').val(JSON.stringify(serviceData));
+    }
+
+    function captureWizardState() {
+        // Step 1 — vehicle
+        $('#hdnSelectedVehicleId').val($('#ddlVehicle').val() || '');
+
+        // Step 2 — services (guarded; captureServiceData is also called on checkbox change)
+        captureServiceData();
+
+        // Step 3 — schedule / technician.
+        // Guard: only write when in scope so navigating from step 1→2 doesn't blank
+        // a date that was already saved when the user was on step 3.
+        if ($('#txtScheduledDate').length) {
+            $('#hdnScheduledDate').val($('#txtScheduledDate').val() || '');
+        }
+        if ($('#ddlTechnician').length) {
+            $('#hdnTechnicianId').val($('#ddlTechnician').val() || '');
+        }
+    }
+
+    function restoreWizardState() {
+        var customerId = $('#ddlCustomer').val();
+        if (customerId) {
+            populateVehicles(customerId, $('#hdnSelectedVehicleId').val());
+        }
+
+        var categoryId = $('#ddlCategory').val();
+        var checkedIdsRaw = $('#hdnCheckedServiceIds').val();
+        var checkedIds = checkedIdsRaw ? checkedIdsRaw.split(',') : [];
+        if (categoryId) {
+            populateServices(categoryId, checkedIds);
+        }
+    }
+
+    // Wizard buttons and sidebar links initiate the Web Forms postback. Capture
+    // during the click, before ASP.NET AJAX serializes the form.
+    $(document).on('click', '#jobCardWizard input[type="submit"], ' +
+        '#jobCardWizard button[type="submit"], ' +
+        '#jobCardWizard a[href^="javascript:__doPostBack"]', captureWizardState);
+    $('#mainForm').on('submit', captureWizardState);
+
+    // UpdatePanel replaces its descendants rather than reloading the document.
+    // Observing that replacement provides a dependable end-request signal without
+    // depending on the optional Sys.WebForms global.
+    var restoreTimer;
+    var updatePanel = document.getElementById('wizardUpdatePanel');
+    if (updatePanel && window.MutationObserver) {
+        new MutationObserver(function () {
+            window.clearTimeout(restoreTimer);
+            restoreTimer = window.setTimeout(restoreWizardState, 0);
+        }).observe(updatePanel, { childList: true, subtree: true });
+    }
 });

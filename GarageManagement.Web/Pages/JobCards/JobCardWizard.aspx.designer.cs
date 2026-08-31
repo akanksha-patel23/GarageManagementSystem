@@ -42,6 +42,33 @@ namespace GarageManagement.Web.Pages.JobCards
         protected global::System.Web.UI.HtmlControls.HtmlInputHidden hdnCheckedServiceIds;
 
         /// <summary>
+        /// hdnCheckedServiceData control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hdnCheckedServiceData;
+
+        /// <summary>
+        /// hdnScheduledDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hdnScheduledDate;
+
+        /// <summary>
+        /// hdnTechnicianId control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden hdnTechnicianId;
+
+        /// <summary>
         /// lblWizardError control.
         /// </summary>
         /// <remarks>
