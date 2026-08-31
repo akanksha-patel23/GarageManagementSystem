@@ -1,0 +1,24 @@
+/* =====================================================================
+   msc-dashboard.css — chart panel grid
+   ===================================================================== */
+
+.msc-dashboard-grid {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.msc-dashboard-panel {
+    flex: 1 1 380px;
+    background: var(--msc-card);
+    border: 1px solid var(--msc-border);
+    border-radius: 6px;
+    padding: 1.25rem;
+}
+
+    .msc-dashboard-panel h3 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #4A5865;
+        margin-bottom: 0.75rem;
+    }

@@ -1,0 +1,164 @@
+/* =====================================================================
+   msc-base.css — Garage Management System
+   Design tokens:
+   - Ink:        #1E232C (near-black, cool)
+   - Steel:      #3A5068 (primary — instrument-panel blue-steel)
+   - Signal:     #D9822B (accent — hazard amber, used sparingly)
+   - Success:    #3F8358
+   - Danger:     #B23A34
+   - Surface:    #F6F7F8 (page background)
+   - Card:       #FFFFFF
+   - Border:     #D9DEE2
+   Type: IBM Plex Sans (UI/body), IBM Plex Mono (data — IDs, prices, dates)
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+    --msc-ink: #1E232C;
+    --msc-steel: #3A5068;
+    --msc-steel-dark: #2A3B4D;
+    --msc-signal: #D9822B;
+    --msc-success: #3F8358;
+    --msc-danger: #B23A34;
+    --msc-surface: #F6F7F8;
+    --msc-card: #FFFFFF;
+    --msc-border: #D9DEE2;
+    --msc-font-ui: 'IBM Plex Sans', -apple-system, Segoe UI, Roboto, sans-serif;
+    --msc-font-data: 'IBM Plex Mono', 'Courier New', monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--msc-surface);
+    color: var(--msc-ink);
+    font-family: var(--msc-font-ui);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--msc-font-ui);
+    font-weight: 600;
+    color: var(--msc-ink);
+    margin: 0 0 0.6em;
+}
+
+.msc-page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--msc-border);
+    margin-bottom: 1.25rem;
+}
+
+a {
+    color: var(--msc-steel);
+    text-decoration: none;
+}
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+        outline: 2px solid var(--msc-signal);
+        outline-offset: 2px;
+    }
+
+/* ---- Header ---- */
+
+.msc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background: var(--msc-steel-dark);
+    padding: 0.85rem 1.5rem;
+    /* Signature: a thin hazard-stripe rule under the header — the one
+       deliberate accent on the page, nodding to workshop caution signage. */
+    border-bottom: 4px solid transparent;
+    border-image: repeating-linear-gradient( -45deg, var(--msc-signal) 0 10px, var(--msc-steel-dark) 10px 20px ) 4;
+}
+
+.msc-header-brand .msc-logo {
+    color: #FFFFFF;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+    .msc-header-brand .msc-logo:hover {
+        text-decoration: none;
+        opacity: 0.9;
+    }
+
+/* ---- Menu (asp:Menu) ---- */
+
+.msc-menu, .msc-menu table {
+    font-family: var(--msc-font-ui);
+}
+
+    .msc-menu a {
+        color: #D7DEE5 !important;
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding: 0.4rem 0.75rem !important;
+        border-radius: 4px;
+    }
+
+        .msc-menu a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #FFFFFF !important;
+            text-decoration: none;
+        }
+
+/* ---- Breadcrumb (asp:SiteMapPath) ---- */
+
+.msc-breadcrumb {
+    background: var(--msc-card);
+    border-bottom: 1px solid var(--msc-border);
+    padding: 0.5rem 1.5rem;
+    font-size: 0.82rem;
+    color: #667685;
+}
+
+.msc-breadcrumb-path a {
+    color: var(--msc-steel);
+}
+
+/* ---- Main content ---- */
+
+.msc-main-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.75rem 1.5rem 3rem;
+}
+
+/* ---- Footer ---- */
+
+.msc-footer {
+    text-align: center;
+    padding: 1.25rem;
+    color: #8B98A5;
+    font-size: 0.8rem;
+    border-top: 1px solid var(--msc-border);
+}
+
+/* ---- Generic hint / error page ---- */
+
+.msc-hint {
+    color: #667685;
+    font-size: 0.85rem;
+}
+
+.msc-error-page {
+    text-align: center;
+    padding: 3rem 1rem;
+}

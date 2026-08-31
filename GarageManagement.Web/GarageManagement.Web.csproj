@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</ProjectGuid>
+    <!-- ADD THIS LINE ↓ -->
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GarageManagement.Web</RootNamespace>
+    <AssemblyName>GarageManagement.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <WebProjectProperties>
+      <UseIIS>True</UseIIS>
+      <AutoAssignPort>True</AutoAssignPort>
+      <DevelopmentServerPort>0</DevelopmentServerPort>
+      <DevelopmentServerVPath>/</DevelopmentServerVPath>
+      <IISUrl>http://www.webgaragesystem.com</IISUrl>
+      <NTLMAuthentication>False</NTLMAuthentication>
+      <UseCustomServer>False</UseCustomServer>
+      <CustomServerUrl>
+      </CustomServerUrl>
+    </WebProjectProperties>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>15.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+    <UseIISExpress>false</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>GarageManagement.Web.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>GarageManagement.Web.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=20.1.0.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.20.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <!-- <Reference Include="System.Web.DataVisualization" /> -->
+    <Reference Include="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <!-- 
+	<Reference Include="GarageManagement.Web.DAL">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-123456789012}</Project>
+      <Name>GarageManagement.Web.DAL</Name>
+      <HintPath>..\GarageManagement.Web.DAL\bin\$(Configuration)\GarageManagement.Web.DAL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+	-->
+  </ItemGroup>
+  <!-- ADD THIS in a separate <ItemGroup> ↓ -->
+  <ItemGroup>
+    <ProjectReference Include="..\GarageManagement.Web.DAL\GarageManagement.Web.DAL.vbproj">
+      <Project>{C3D4E5F6-A7B8-9012-CDEF-123456789012}</Project>
+      <Name>GarageManagement.Web.DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\CSS\msc-base.css" />
+    <Content Include="Content\CSS\msc-dashboard.css" />
+    <Content Include="Content\CSS\msc-forms.css" />
+    <Content Include="Content\CSS\msc-jobcard-wizard.css" />
+    <Content Include="Default.aspx" />
+    <Content Include="GarageManagement.Web.xml" />
+    <Content Include="Global.asax" />
+    <Content Include="obj\Debug\GarageManagement.Web.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\GarageManagement.Web.dll" />
+    <Content Include="obj\Debug\GarageManagement.Web.pdb" />
+    <Content Include="Pages\Customers\CustomerDetails.aspx" />
+    <Content Include="Pages\Customers\CustomerList.aspx" />
+    <Content Include="Pages\Dashboard\Dashboard.aspx" />
+    <Content Include="Pages\Invoices\InvoiceGenerate.aspx" />
+    <Content Include="Pages\Invoices\InvoiceList.aspx" />
+    <Content Include="Pages\JobCards\JobCardList.aspx" />
+    <Content Include="Pages\JobCards\JobCardStatusBoard.aspx" />
+    <Content Include="Pages\JobCards\JobCardWizard.aspx" />
+    <Content Include="Pages\Parts\PartsList.aspx" />
+    <Content Include="Pages\Parts\PartsDetails.aspx" />
+    <Content Include="Pages\ServiceCatalog\ServiceCatalogDetails.aspx" />
+    <Content Include="Pages\ServiceCatalog\ServiceCatalogList.aspx" />
+    <Content Include="Pages\ServiceCategories\ServiceCategoryDetails.aspx" />
+    <Content Include="Pages\ServiceCategories\ServiceCategoryList.aspx" />
+    <Content Include="Pages\Shared\Error.aspx" />
+    <Content Include="Pages\Technicians\TechnicianDetails.aspx" />
+    <Content Include="Pages\Technicians\TechnicianDirectory.aspx" />
+    <Content Include="Pages\Vehicles\VehicleDetails.aspx" />
+    <Content Include="Pages\Vehicles\VehicleList.aspx" />
+    <Content Include="Scripts\customer-autocomplete.js" />
+    <Content Include="Scripts\dashboard.js" />
+    <Content Include="Scripts\jobcard-status.js" />
+    <Content Include="Scripts\jobcard-wizard.js" />
+    <None Include="Scripts\jquery-3.7.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-3.7.1.js" />
+    <Content Include="Scripts\jquery-3.7.1.min.js" />
+    <Content Include="Scripts\jquery-3.7.1.slim.js" />
+    <Content Include="Scripts\jquery-3.7.1.slim.min.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BAL\PartBAL.cs" />
+    <Compile Include="BAL\ServiceCatalogBAL.cs" />
+    <Compile Include="BAL\ServiceCategoryBAL.cs" />
+    <Compile Include="BAL\TechnicianBAL.cs" />
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\JobStatusHistory.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="BAL\CustomerBAL.cs" />
+    <Compile Include="BAL\VehicleBAL.cs" />
+    <Compile Include="BAL\InvoiceBAL.cs" />
+    <Compile Include="BAL\JobCardBAL.cs" />
+    <Compile Include="Entities\Customer.cs" />
+    <Compile Include="Entities\Vehicle.cs" />
+    <Compile Include="Entities\JobCard.cs" />
+    <Compile Include="Entities\Part.cs" />
+    <Compile Include="Entities\ServiceCatalog.cs" />
+    <Compile Include="Entities\ServiceCategory.cs" />
+    <Compile Include="Entities\Technician.cs" />
+    <Compile Include="Entities\Invoice.cs" />
+    <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+    <Compile Include="Pages\Customers\CustomerDetails.aspx.cs">
+      <DependentUpon>CustomerDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Customers\CustomerDetails.aspx.designer.cs">
+      <DependentUpon>CustomerDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Customers\CustomerList.aspx.cs">
+      <DependentUpon>CustomerList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Customers\CustomerList.aspx.designer.cs">
+      <DependentUpon>CustomerList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dashboard\Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Dashboard\Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Invoices\InvoiceGenerate.aspx.cs">
+      <DependentUpon>InvoiceGenerate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Invoices\InvoiceGenerate.aspx.designer.cs">
+      <DependentUpon>InvoiceGenerate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Invoices\InvoiceList.aspx.cs">
+      <DependentUpon>InvoiceList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Invoices\InvoiceList.aspx.designer.cs">
+      <DependentUpon>InvoiceList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\JobCards\JobCardList.aspx.cs">
+      <DependentUpon>JobCardList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\JobCards\JobCardList.aspx.designer.cs">
+      <DependentUpon>JobCardList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\JobCards\JobCardStatusBoard.aspx.cs">
+      <DependentUpon>JobCardStatusBoard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\JobCards\JobCardStatusBoard.aspx.designer.cs">
+      <DependentUpon>JobCardStatusBoard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\JobCards\JobCardWizard.aspx.cs">
+      <DependentUpon>JobCardWizard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\JobCards\JobCardWizard.aspx.designer.cs">
+      <DependentUpon>JobCardWizard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Parts\PartsList.aspx.cs">
+      <DependentUpon>PartsList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Parts\PartsList.aspx.designer.cs">
+      <DependentUpon>PartsList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ServiceCatalog\ServiceCatalogDetails.aspx.cs">
+      <DependentUpon>ServiceCatalogDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ServiceCatalog\ServiceCatalogDetails.aspx.designer.cs">
+      <DependentUpon>ServiceCatalogDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ServiceCatalog\ServiceCatalogList.aspx.cs">
+      <DependentUpon>ServiceCatalogList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ServiceCatalog\ServiceCatalogList.aspx.designer.cs">
+      <DependentUpon>ServiceCatalogList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ServiceCategories\ServiceCategoryDetails.aspx.cs">
+      <DependentUpon>ServiceCategoryDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ServiceCategories\ServiceCategoryDetails.aspx.designer.cs">
+      <DependentUpon>ServiceCategoryDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ServiceCategories\ServiceCategoryList.aspx.cs">
+      <DependentUpon>ServiceCategoryList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\ServiceCategories\ServiceCategoryList.aspx.designer.cs">
+      <DependentUpon>ServiceCategoryList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Shared\Error.aspx.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Shared\Error.aspx.designer.cs">
+      <DependentUpon>Error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Shared\Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Technicians\TechnicianDetails.aspx.cs">
+      <DependentUpon>TechnicianDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Technicians\TechnicianDetails.aspx.designer.cs">
+      <DependentUpon>TechnicianDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Technicians\TechnicianDirectory.aspx.cs">
+      <DependentUpon>TechnicianDirectory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Technicians\TechnicianDirectory.aspx.designer.cs">
+      <DependentUpon>TechnicianDirectory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Parts\PartsDetails.aspx.cs">
+      <DependentUpon>PartsDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Parts\PartsDetails.aspx.designer.cs">
+      <DependentUpon>PartsDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Vehicles\VehicleDetails.aspx.cs">
+      <DependentUpon>VehicleDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Vehicles\VehicleDetails.aspx.designer.cs">
+      <DependentUpon>VehicleDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Vehicles\VehicleList.aspx.cs">
+      <DependentUpon>VehicleList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Vehicles\VehicleList.aspx.designer.cs">
+      <DependentUpon>VehicleList.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Start\" />
+    <Folder Include="obj\Debug\TempPE\" />
+    <Folder Include="Uploads\VehiclePhotos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
+    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <Content Include="obj\Debug\GarageMa.D2F5A3F8.Up2Date" />
+    <Content Include="obj\Debug\GarageManagement.Web.csproj.AssemblyReference.cache" />
+    <Content Include="obj\Debug\GarageManagement.Web.csproj.CoreCompileInputs.cache" />
+    <None Include="packages.config" />
+    <Content Include="Pages\Shared\Site.Master" />
+    <Content Include="Pages\Shared\Web.sitemap" />
+    <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.7.1.min.map" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="Exists('$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>56005</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://www.webgaragesystem.com</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -1,0 +1,291 @@
+/* =====================================================================
+   msc-forms.css — form controls, buttons, validation, grids/lists
+   ===================================================================== */
+
+/* ---- Form layout ---- */
+
+.msc-form {
+    max-width: 560px;
+    background: var(--msc-card);
+    border: 1px solid var(--msc-border);
+    border-radius: 6px;
+    padding: 1.5rem;
+}
+
+.msc-form-row {
+    margin-bottom: 1.1rem;
+}
+
+.msc-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #4A5865;
+    margin-bottom: 0.3rem;
+}
+
+.msc-input {
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--msc-border);
+    border-radius: 4px;
+    font-family: var(--msc-font-ui);
+    font-size: 0.92rem;
+    color: var(--msc-ink);
+    background: #FFFFFF;
+}
+
+    .msc-input:focus {
+        border-color: var(--msc-steel);
+    }
+
+/* ---- Buttons ---- */
+
+.msc-btn {
+    display: inline-block;
+    padding: 0.5rem 1.1rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    font-family: var(--msc-font-ui);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none !important;
+}
+
+.msc-btn-primary {
+    background: var(--msc-steel);
+    color: #FFFFFF;
+}
+
+    .msc-btn-primary:hover {
+        background: var(--msc-steel-dark);
+    }
+
+.msc-btn-secondary {
+    background: transparent;
+    color: var(--msc-steel);
+    border-color: var(--msc-border);
+}
+
+    .msc-btn-secondary:hover {
+        background: var(--msc-surface);
+    }
+
+.msc-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.msc-link {
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+}
+
+.msc-link-danger {
+    color: var(--msc-danger);
+}
+
+/* ---- Validation ---- */
+
+.msc-validation-error {
+    display: block;
+    color: var(--msc-danger);
+    font-size: 0.78rem;
+    margin-top: 0.2rem;
+}
+
+.msc-validation-summary {
+    color: var(--msc-danger);
+    background: #FBEAE9;
+    border: 1px solid #F0C6C3;
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    font-size: 0.85rem;
+}
+
+/* ---- Messages ---- */
+
+.msc-message {
+    display: block;
+    padding: 0.6rem 0.9rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    margin: 0.75rem 0;
+}
+
+.msc-message-success {
+    background: #E9F5EC;
+    color: var(--msc-success);
+    border: 1px solid #C3E3CB;
+}
+
+.msc-message-error {
+    background: #FBEAE9;
+    color: var(--msc-danger);
+    border: 1px solid #F0C6C3;
+}
+
+/* ---- Search bar ---- */
+
+.msc-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+    .msc-search-bar .msc-input {
+        width: auto;
+        flex: 1 1 240px;
+    }
+
+/* ---- GridView ---- */
+
+.msc-grid {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--msc-card);
+    border: 1px solid var(--msc-border);
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 0.88rem;
+}
+
+    .msc-grid th {
+        background: var(--msc-surface);
+        text-align: left;
+        padding: 0.6rem 0.85rem;
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: #4A5865;
+        border-bottom: 1px solid var(--msc-border);
+    }
+
+    .msc-grid td {
+        padding: 0.6rem 0.85rem;
+        border-bottom: 1px solid var(--msc-border);
+        font-family: var(--msc-font-data);
+        font-size: 0.85rem;
+        color: var(--msc-ink);
+    }
+
+    .msc-grid tr:last-child td {
+        border-bottom: none;
+    }
+
+    .msc-grid tr:hover td {
+        background: var(--msc-surface);
+    }
+
+    /* Pager row ASP.NET renders for AllowPaging="true" */
+    .msc-grid td[colspan] {
+        font-family: var(--msc-font-ui);
+        text-align: center;
+        padding: 0.7rem;
+    }
+
+/* ---- DetailsView ---- */
+
+.msc-detailsview {
+    width: 100%;
+    max-width: 560px;
+    border-collapse: collapse;
+    background: var(--msc-card);
+    border: 1px solid var(--msc-border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+    .msc-detailsview th {
+        text-align: left;
+        background: var(--msc-surface);
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #4A5865;
+        padding: 0.75rem 1rem;
+        width: 160px;
+        vertical-align: top;
+    }
+
+    .msc-detailsview td {
+        padding: 0.6rem 1rem;
+        border-bottom: 1px solid var(--msc-border);
+    }
+
+/* ---- Checkbox list (Parts / general use) ---- */
+
+.msc-checkbox-item {
+    display: block;
+    font-size: 0.88rem;
+    padding: 0.3rem 0;
+}
+
+/* ---- Technician directory cards (DataList) ---- */
+
+.msc-datalist {
+    width: 100%;
+}
+
+.msc-technician-card {
+    background: var(--msc-card);
+    border: 1px solid var(--msc-border);
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 0 0.75rem 0.75rem 0;
+}
+
+    .msc-technician-card h3 {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+/* ---- Invoice ListView rows ---- */
+
+.msc-invoice-row td {
+    padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid var(--msc-border);
+    font-family: var(--msc-font-data);
+    font-size: 0.85rem;
+}
+
+.msc-invoice-row-alt td {
+    background: var(--msc-surface);
+}
+
+/* ---- Service category TreeView ---- */
+
+.msc-treeview {
+    background: var(--msc-card);
+    border: 1px solid var(--msc-border);
+    border-radius: 6px;
+    padding: 1rem;
+    font-size: 0.9rem;
+}
+
+/* ---- ModalPopupExtender preview (JobCardList) ---- */
+
+.msc-modal {
+    background: var(--msc-card);
+    border: 1px solid var(--msc-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-width: 360px;
+    box-shadow: 0 8px 24px rgba(30, 35, 44, 0.15);
+}
+
+    .msc-modal h3 {
+        margin-bottom: 0.75rem;
+    }
+
+    .msc-modal p {
+        margin: 0.35rem 0;
+        font-size: 0.9rem;
+    }
+
+.msc-modal-backdrop {
+    background: rgba(30, 35, 44, 0.5);
+}

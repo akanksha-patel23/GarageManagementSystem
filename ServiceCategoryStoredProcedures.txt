@@ -1,0 +1,237 @@
+-- =============================================
+-- Stored Procedure: spInsertServiceCategory
+-- Description: Inserts a new service category record
+-- =============================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spInsertServiceCategory]
+    @ParentCategoryID INT = NULL,
+    @CategoryName NVARCHAR(100),
+    @CategoryID INT OUTPUT,
+    @ErrorID INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET @ErrorID = 0;
+
+    BEGIN TRY
+        INSERT INTO ServiceCategories (ParentCategoryID, CategoryName)
+        VALUES (@ParentCategoryID, @CategoryName);
+
+        SET @CategoryID = SCOPE_IDENTITY();
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorNum INT,
+                @ErrorSev INT,
+                @ErrorState INT,
+                @ErrorLine INT,
+                @ErrorProc NVARCHAR(200),
+                @ErrorMsg NVARCHAR(2047),
+                @ErrorProcCall NVARCHAR(MAX);
+
+        SELECT @ErrorNum = ERROR_NUMBER(),
+               @ErrorSev = ERROR_SEVERITY(),
+               @ErrorLine = ERROR_LINE(),
+               @ErrorState = ERROR_STATE(),
+               @ErrorProc = '[' + DB_NAME() + '].' + ISNULL('[' + OBJECT_SCHEMA_NAME(@@PROCID) + ']', 'UNKNOWN_SCHEMA') + '.' + ISNULL('[' + ERROR_PROCEDURE() + ']', 'UNKNOWN_OBJECT'),
+               @ErrorMsg = LEFT(ERROR_MESSAGE(), 2047);
+
+        SELECT @ErrorProcCall = @ErrorProc + ' @ParentCategoryID = ' + ISNULL(CAST(@ParentCategoryID AS NVARCHAR(20)), 'Null') + ', @CategoryName = ' + ISNULL(@CategoryName, 'Null');
+
+        EXECUTE [GLOG].spLogDBErrorDetail
+            @ErrorNum = @ErrorNum,
+            @ErrorSev = @ErrorSev,
+            @ErrorState = @ErrorState,
+            @ErrorLine = @ErrorLine,
+            @ErrorProc = @ErrorProc,
+            @ErrorMsg = @ErrorMsg,
+            @ErrorProcCall = @ErrorProcCall,
+            @ErrorID = @ErrorID OUTPUT;
+    END CATCH
+END
+GO
+
+-- =============================================
+-- Stored Procedure: spUpdateServiceCategory
+-- Description: Updates an existing service category record
+-- =============================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spUpdateServiceCategory]
+    @CategoryID INT,
+    @ParentCategoryID INT = NULL,
+    @CategoryName NVARCHAR(100),
+    @ErrorID INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET @ErrorID = 0;
+
+    BEGIN TRY
+        UPDATE ServiceCategories
+        SET ParentCategoryID = @ParentCategoryID,
+            CategoryName = @CategoryName
+        WHERE CategoryID = @CategoryID;
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorNum INT,
+                @ErrorSev INT,
+                @ErrorState INT,
+                @ErrorLine INT,
+                @ErrorProc NVARCHAR(200),
+                @ErrorMsg NVARCHAR(2047),
+                @ErrorProcCall NVARCHAR(MAX);
+
+        SELECT @ErrorNum = ERROR_NUMBER(),
+               @ErrorSev = ERROR_SEVERITY(),
+               @ErrorLine = ERROR_LINE(),
+               @ErrorState = ERROR_STATE(),
+               @ErrorProc = '[' + DB_NAME() + '].' + ISNULL('[' + OBJECT_SCHEMA_NAME(@@PROCID) + ']', 'UNKNOWN_SCHEMA') + '.' + ISNULL('[' + ERROR_PROCEDURE() + ']', 'UNKNOWN_OBJECT'),
+               @ErrorMsg = LEFT(ERROR_MESSAGE(), 2047);
+
+        SELECT @ErrorProcCall = @ErrorProc + ' @CategoryID = ' + ISNULL(CAST(@CategoryID AS NVARCHAR(20)), 'Null') + ', @ParentCategoryID = ' + ISNULL(CAST(@ParentCategoryID AS NVARCHAR(20)), 'Null') + ', @CategoryName = ' + ISNULL(@CategoryName, 'Null');
+
+        EXECUTE [GLOG].spLogDBErrorDetail
+            @ErrorNum = @ErrorNum,
+            @ErrorSev = @ErrorSev,
+            @ErrorState = @ErrorState,
+            @ErrorLine = @ErrorLine,
+            @ErrorProc = @ErrorProc,
+            @ErrorMsg = @ErrorMsg,
+            @ErrorProcCall = @ErrorProcCall,
+            @ErrorID = @ErrorID OUTPUT;
+    END CATCH
+END
+GO
+
+-- =============================================
+-- Stored Procedure: spDeleteServiceCategory
+-- Description: Deletes a service category record
+-- =============================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spDeleteServiceCategory]
+    @CategoryID INT,
+    @ErrorID INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET @ErrorID = 0;
+
+    BEGIN TRY
+        DELETE FROM ServiceCategories
+        WHERE CategoryID = @CategoryID;
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorNum INT,
+                @ErrorSev INT,
+                @ErrorState INT,
+                @ErrorLine INT,
+                @ErrorProc NVARCHAR(200),
+                @ErrorMsg NVARCHAR(2047),
+                @ErrorProcCall NVARCHAR(MAX);
+
+        SELECT @ErrorNum = ERROR_NUMBER(),
+               @ErrorSev = ERROR_SEVERITY(),
+               @ErrorLine = ERROR_LINE(),
+               @ErrorState = ERROR_STATE(),
+               @ErrorProc = '[' + DB_NAME() + '].' + ISNULL('[' + OBJECT_SCHEMA_NAME(@@PROCID) + ']', 'UNKNOWN_SCHEMA') + '.' + ISNULL('[' + ERROR_PROCEDURE() + ']', 'UNKNOWN_OBJECT'),
+               @ErrorMsg = LEFT(ERROR_MESSAGE(), 2047);
+
+        SELECT @ErrorProcCall = @ErrorProc + ' @CategoryID = ' + ISNULL(CAST(@CategoryID AS NVARCHAR(20)), 'Null');
+
+        EXECUTE [GLOG].spLogDBErrorDetail
+            @ErrorNum = @ErrorNum,
+            @ErrorSev = @ErrorSev,
+            @ErrorState = @ErrorState,
+            @ErrorLine = @ErrorLine,
+            @ErrorProc = @ErrorProc,
+            @ErrorMsg = @ErrorMsg,
+            @ErrorProcCall = @ErrorProcCall,
+            @ErrorID = @ErrorID OUTPUT;
+    END CATCH
+END
+GO
+
+-- =============================================
+-- Stored Procedure: spGetServiceCategoryTree
+-- Description: Returns full hierarchy with a Depth column for TreeView indentation
+-- =============================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spGetServiceCategoryTree]
+    @ErrorID INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET @ErrorID = 0;
+
+    BEGIN TRY
+        ;WITH CategoryCTE AS (
+            -- Base case: root categories (no parent)
+            SELECT 
+                CategoryID,
+                ParentCategoryID,
+                CategoryName,
+                0 AS Depth
+            FROM ServiceCategories
+            WHERE ParentCategoryID IS NULL
+
+            UNION ALL
+
+            -- Recursive case: child categories
+            SELECT 
+                sc.CategoryID,
+                sc.ParentCategoryID,
+                sc.CategoryName,
+                cte.Depth + 1 AS Depth
+            FROM ServiceCategories sc
+            INNER JOIN CategoryCTE cte ON sc.ParentCategoryID = cte.CategoryID
+        )
+        SELECT 
+            CategoryID,
+            ParentCategoryID,
+            CategoryName,
+            Depth,
+            REPLICATE('    ', Depth) + CategoryName AS IndentedName
+        FROM CategoryCTE
+        ORDER BY Depth, CategoryName;
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorNum INT,
+                @ErrorSev INT,
+                @ErrorState INT,
+                @ErrorLine INT,
+                @ErrorProc NVARCHAR(200),
+                @ErrorMsg NVARCHAR(2047),
+                @ErrorProcCall NVARCHAR(MAX);
+
+        SELECT @ErrorNum = ERROR_NUMBER(),
+               @ErrorSev = ERROR_SEVERITY(),
+               @ErrorLine = ERROR_LINE(),
+               @ErrorState = ERROR_STATE(),
+               @ErrorProc = '[' + DB_NAME() + '].' + ISNULL('[' + OBJECT_SCHEMA_NAME(@@PROCID) + ']', 'UNKNOWN_SCHEMA') + '.' + ISNULL('[' + ERROR_PROCEDURE() + ']', 'UNKNOWN_OBJECT'),
+               @ErrorMsg = LEFT(ERROR_MESSAGE(), 2047);
+
+        SELECT @ErrorProcCall = @ErrorProc;
+
+        EXECUTE [GLOG].spLogDBErrorDetail
+            @ErrorNum = @ErrorNum,
+            @ErrorSev = @ErrorSev,
+            @ErrorState = @ErrorState,
+            @ErrorLine = @ErrorLine,
+            @ErrorProc = @ErrorProc,
+            @ErrorMsg = @ErrorMsg,
+            @ErrorProcCall = @ErrorProcCall,
+            @ErrorID = @ErrorID OUTPUT;
+    END CATCH
+END
+GO

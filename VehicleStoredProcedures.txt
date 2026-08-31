@@ -1,0 +1,328 @@
+-- =============================================
+-- Stored Procedure: spInsertVehicle
+-- Description: Inserts a new vehicle record
+-- =============================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spInsertVehicle]
+    @CustomerID INT,
+    @RegNumber NVARCHAR(20),
+    @Make NVARCHAR(50),
+    @Model NVARCHAR(50),
+    @Year INT = NULL,
+    @VehicleType NVARCHAR(30) = NULL,
+    @VehicleID INT OUTPUT,
+    @ErrorID INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET @ErrorID = 0;
+
+    BEGIN TRY
+        INSERT INTO Vehicles (CustomerID, RegNumber, Make, Model, Year, VehicleType)
+        VALUES (@CustomerID, @RegNumber, @Make, @Model, @Year, @VehicleType);
+
+        SET @VehicleID = SCOPE_IDENTITY();
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorNum INT,
+                @ErrorSev INT,
+                @ErrorState INT,
+                @ErrorLine INT,
+                @ErrorProc NVARCHAR(200),
+                @ErrorMsg NVARCHAR(2047),
+                @ErrorProcCall NVARCHAR(MAX);
+
+        SELECT @ErrorNum = ERROR_NUMBER(),
+               @ErrorSev = ERROR_SEVERITY(),
+               @ErrorLine = ERROR_LINE(),
+               @ErrorState = ERROR_STATE(),
+               @ErrorProc = '[' + DB_NAME() + '].' + ISNULL('[' + OBJECT_SCHEMA_NAME(@@PROCID) + ']', 'UNKNOWN_SCHEMA') + '.' + ISNULL('[' + ERROR_PROCEDURE() + ']', 'UNKNOWN_OBJECT'),
+               @ErrorMsg = LEFT(ERROR_MESSAGE(), 2047);
+
+        SELECT @ErrorProcCall = @ErrorProc + ' @CustomerID = ' + ISNULL(CAST(@CustomerID AS NVARCHAR(20)), 'Null') + ', @RegNumber = ' + ISNULL(@RegNumber, 'Null') + ', @Make = ' + ISNULL(@Make, 'Null') + ', @Model = ' + ISNULL(@Model, 'Null') + ', @Year = ' + ISNULL(CAST(@Year AS NVARCHAR(20)), 'Null') + ', @VehicleType = ' + ISNULL(@VehicleType, 'Null');
+
+        EXECUTE [GLOG].spLogDBErrorDetail
+            @ErrorNum = @ErrorNum,
+            @ErrorSev = @ErrorSev,
+            @ErrorState = @ErrorState,
+            @ErrorLine = @ErrorLine,
+            @ErrorProc = @ErrorProc,
+            @ErrorMsg = @ErrorMsg,
+            @ErrorProcCall = @ErrorProcCall,
+            @ErrorID = @ErrorID OUTPUT;
+    END CATCH
+END
+GO
+
+-- =============================================
+-- Stored Procedure: spUpdateVehicle
+-- Description: Updates an existing vehicle record
+-- =============================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spUpdateVehicle]
+    @VehicleID INT,
+    @CustomerID INT,
+    @RegNumber NVARCHAR(20),
+    @Make NVARCHAR(50),
+    @Model NVARCHAR(50),
+    @Year INT = NULL,
+    @VehicleType NVARCHAR(30) = NULL,
+    @ErrorID INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET @ErrorID = 0;
+
+    BEGIN TRY
+        UPDATE Vehicles
+        SET CustomerID = @CustomerID,
+            RegNumber = @RegNumber,
+            Make = @Make,
+            Model = @Model,
+            Year = @Year,
+            VehicleType = @VehicleType
+        WHERE VehicleID = @VehicleID;
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorNum INT,
+                @ErrorSev INT,
+                @ErrorState INT,
+                @ErrorLine INT,
+                @ErrorProc NVARCHAR(200),
+                @ErrorMsg NVARCHAR(2047),
+                @ErrorProcCall NVARCHAR(MAX);
+
+        SELECT @ErrorNum = ERROR_NUMBER(),
+               @ErrorSev = ERROR_SEVERITY(),
+               @ErrorLine = ERROR_LINE(),
+               @ErrorState = ERROR_STATE(),
+               @ErrorProc = '[' + DB_NAME() + '].' + ISNULL('[' + OBJECT_SCHEMA_NAME(@@PROCID) + ']', 'UNKNOWN_SCHEMA') + '.' + ISNULL('[' + ERROR_PROCEDURE() + ']', 'UNKNOWN_OBJECT'),
+               @ErrorMsg = LEFT(ERROR_MESSAGE(), 2047);
+
+        SELECT @ErrorProcCall = @ErrorProc + ' @VehicleID = ' + ISNULL(CAST(@VehicleID AS NVARCHAR(20)), 'Null') + ', @CustomerID = ' + ISNULL(CAST(@CustomerID AS NVARCHAR(20)), 'Null') + ', @RegNumber = ' + ISNULL(@RegNumber, 'Null') + ', @Make = ' + ISNULL(@Make, 'Null') + ', @Model = ' + ISNULL(@Model, 'Null') + ', @Year = ' + ISNULL(CAST(@Year AS NVARCHAR(20)), 'Null') + ', @VehicleType = ' + ISNULL(@VehicleType, 'Null');
+
+        EXECUTE [GLOG].spLogDBErrorDetail
+            @ErrorNum = @ErrorNum,
+            @ErrorSev = @ErrorSev,
+            @ErrorState = @ErrorState,
+            @ErrorLine = @ErrorLine,
+            @ErrorProc = @ErrorProc,
+            @ErrorMsg = @ErrorMsg,
+            @ErrorProcCall = @ErrorProcCall,
+            @ErrorID = @ErrorID OUTPUT;
+    END CATCH
+END
+GO
+
+-- =============================================
+-- Stored Procedure: spDeleteVehicle
+-- Description: Deletes a vehicle record
+-- =============================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spDeleteVehicle]
+    @VehicleID INT,
+    @ErrorID INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET @ErrorID = 0;
+
+    BEGIN TRY
+        DELETE FROM Vehicles
+        WHERE VehicleID = @VehicleID;
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorNum INT,
+                @ErrorSev INT,
+                @ErrorState INT,
+                @ErrorLine INT,
+                @ErrorProc NVARCHAR(200),
+                @ErrorMsg NVARCHAR(2047),
+                @ErrorProcCall NVARCHAR(MAX);
+
+        SELECT @ErrorNum = ERROR_NUMBER(),
+               @ErrorSev = ERROR_SEVERITY(),
+               @ErrorLine = ERROR_LINE(),
+               @ErrorState = ERROR_STATE(),
+               @ErrorProc = '[' + DB_NAME() + '].' + ISNULL('[' + OBJECT_SCHEMA_NAME(@@PROCID) + ']', 'UNKNOWN_SCHEMA') + '.' + ISNULL('[' + ERROR_PROCEDURE() + ']', 'UNKNOWN_OBJECT'),
+               @ErrorMsg = LEFT(ERROR_MESSAGE(), 2047);
+
+        SELECT @ErrorProcCall = @ErrorProc + ' @VehicleID = ' + ISNULL(CAST(@VehicleID AS NVARCHAR(20)), 'Null');
+
+        EXECUTE [GLOG].spLogDBErrorDetail
+            @ErrorNum = @ErrorNum,
+            @ErrorSev = @ErrorSev,
+            @ErrorState = @ErrorState,
+            @ErrorLine = @ErrorLine,
+            @ErrorProc = @ErrorProc,
+            @ErrorMsg = @ErrorMsg,
+            @ErrorProcCall = @ErrorProcCall,
+            @ErrorID = @ErrorID OUTPUT;
+    END CATCH
+END
+GO
+
+-- =============================================
+-- Stored Procedure: spGetVehicleById
+-- Description: Retrieves a vehicle by its ID
+-- =============================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spGetVehicleById]
+    @VehicleID INT,
+    @ErrorID INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET @ErrorID = 0;
+
+    BEGIN TRY
+        SELECT VehicleID, CustomerID, RegNumber, Make, Model, Year, VehicleType
+        FROM Vehicles
+        WHERE VehicleID = @VehicleID;
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorNum INT,
+                @ErrorSev INT,
+                @ErrorState INT,
+                @ErrorLine INT,
+                @ErrorProc NVARCHAR(200),
+                @ErrorMsg NVARCHAR(2047),
+                @ErrorProcCall NVARCHAR(MAX);
+
+        SELECT @ErrorNum = ERROR_NUMBER(),
+               @ErrorSev = ERROR_SEVERITY(),
+               @ErrorLine = ERROR_LINE(),
+               @ErrorState = ERROR_STATE(),
+               @ErrorProc = '[' + DB_NAME() + '].' + ISNULL('[' + OBJECT_SCHEMA_NAME(@@PROCID) + ']', 'UNKNOWN_SCHEMA') + '.' + ISNULL('[' + ERROR_PROCEDURE() + ']', 'UNKNOWN_OBJECT'),
+               @ErrorMsg = LEFT(ERROR_MESSAGE(), 2047);
+
+        SELECT @ErrorProcCall = @ErrorProc + ' @VehicleID = ' + ISNULL(CAST(@VehicleID AS NVARCHAR(20)), 'Null');
+
+        EXECUTE [GLOG].spLogDBErrorDetail
+            @ErrorNum = @ErrorNum,
+            @ErrorSev = @ErrorSev,
+            @ErrorState = @ErrorState,
+            @ErrorLine = @ErrorLine,
+            @ErrorProc = @ErrorProc,
+            @ErrorMsg = @ErrorMsg,
+            @ErrorProcCall = @ErrorProcCall,
+            @ErrorID = @ErrorID OUTPUT;
+    END CATCH
+END
+GO
+
+-- =============================================
+-- Stored Procedure: spGetAllVehicles
+-- Description: Retrieves all vehicle records
+-- =============================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spGetAllVehicles]
+    @ErrorID INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET @ErrorID = 0;
+
+    BEGIN TRY
+        SELECT VehicleID, CustomerID, RegNumber, Make, Model, Year, VehicleType
+        FROM Vehicles
+        ORDER BY RegNumber;
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorNum INT,
+                @ErrorSev INT,
+                @ErrorState INT,
+                @ErrorLine INT,
+                @ErrorProc NVARCHAR(200),
+                @ErrorMsg NVARCHAR(2047),
+                @ErrorProcCall NVARCHAR(MAX);
+
+        SELECT @ErrorNum = ERROR_NUMBER(),
+               @ErrorSev = ERROR_SEVERITY(),
+               @ErrorLine = ERROR_LINE(),
+               @ErrorState = ERROR_STATE(),
+               @ErrorProc = '[' + DB_NAME() + '].' + ISNULL('[' + OBJECT_SCHEMA_NAME(@@PROCID) + ']', 'UNKNOWN_SCHEMA') + '.' + ISNULL('[' + ERROR_PROCEDURE() + ']', 'UNKNOWN_OBJECT'),
+               @ErrorMsg = LEFT(ERROR_MESSAGE(), 2047);
+
+        SELECT @ErrorProcCall = @ErrorProc;
+
+        EXECUTE [GLOG].spLogDBErrorDetail
+            @ErrorNum = @ErrorNum,
+            @ErrorSev = @ErrorSev,
+            @ErrorState = @ErrorState,
+            @ErrorLine = @ErrorLine,
+            @ErrorProc = @ErrorProc,
+            @ErrorMsg = @ErrorMsg,
+            @ErrorProcCall = @ErrorProcCall,
+            @ErrorID = @ErrorID OUTPUT;
+    END CATCH
+END
+GO
+
+-- =============================================
+-- Stored Procedure: spGetVehiclesByCustomer
+-- Description: Retrieves all vehicles for a specific customer
+-- =============================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[spGetVehiclesByCustomer]
+    @CustomerID INT,
+    @ErrorID INT OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET @ErrorID = 0;
+
+    BEGIN TRY
+        SELECT VehicleID, CustomerID, RegNumber, Make, Model, Year, VehicleType
+        FROM Vehicles
+        WHERE CustomerID = @CustomerID
+        ORDER BY RegNumber;
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorNum INT,
+                @ErrorSev INT,
+                @ErrorState INT,
+                @ErrorLine INT,
+                @ErrorProc NVARCHAR(200),
+                @ErrorMsg NVARCHAR(2047),
+                @ErrorProcCall NVARCHAR(MAX);
+
+        SELECT @ErrorNum = ERROR_NUMBER(),
+               @ErrorSev = ERROR_SEVERITY(),
+               @ErrorLine = ERROR_LINE(),
+               @ErrorState = ERROR_STATE(),
+               @ErrorProc = '[' + DB_NAME() + '].' + ISNULL('[' + OBJECT_SCHEMA_NAME(@@PROCID) + ']', 'UNKNOWN_SCHEMA') + '.' + ISNULL('[' + ERROR_PROCEDURE() + ']', 'UNKNOWN_OBJECT'),
+               @ErrorMsg = LEFT(ERROR_MESSAGE(), 2047);
+
+        SELECT @ErrorProcCall = @ErrorProc + ' @CustomerID = ' + ISNULL(CAST(@CustomerID AS NVARCHAR(20)), 'Null');
+
+        EXECUTE [GLOG].spLogDBErrorDetail
+            @ErrorNum = @ErrorNum,
+            @ErrorSev = @ErrorSev,
+            @ErrorState = @ErrorState,
+            @ErrorLine = @ErrorLine,
+            @ErrorProc = @ErrorProc,
+            @ErrorMsg = @ErrorMsg,
+            @ErrorProcCall = @ErrorProcCall,
+            @ErrorID = @ErrorID OUTPUT;
+    END CATCH
+END
+GO

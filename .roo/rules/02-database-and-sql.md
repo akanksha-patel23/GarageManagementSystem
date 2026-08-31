@@ -1,0 +1,11 @@
+## Database access
+- All CRUD goes through stored procedures. No inline/dynamic SQL, anywhere, ever.
+- Stored procedure naming: sp<Action> (e.g. spInsertJobCard, spGetVehicleByCustomer).
+- Every stored procedure parameter is explicitly typed and parameterized — never string-concatenated.
+- Use SqlTransaction for any multi-table write (e.g. JobCard header + service lines + part lines). Commit only after all inserts succeed; rollback + rethrow on failure.
+- Always use Microsoft.Data.SqlClient (not System.Data.SqlClient). Assume Encrypt=true by default — don't silently disable it to "fix" a connection error.
+- Wrap all SqlConnection/SqlCommand usage in using blocks. No manual .Close() only.
+- Strictly use ADO.NET and stored procedures — do not use Entity Framework anywhere.
+- Use a single shared connection factory/helper (DBHelper.GetConnection() in the DAL project) reading from one config key, so no DAL class duplicates the connection string.
+- Do not create any new project or folder for database schema/scripts — all database operations are managed directly in SQL Server Management Studio.
+- Before creating any stored procedure, verify its presence in db_script.sql. Always reference db_script.sql prior to generating database-related code to ensure accurate column names, table structures, and data types.

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0">
+	<siteMapNode url="~/Pages/Dashboard/Dashboard.aspx" title="Dashboard" description="Revenue and job status overview">
+
+		<siteMapNode url="~/Pages/Customers/CustomerList.aspx" title="Customers" description="Manage customers">
+			<siteMapNode url="~/Pages/Customers/CustomerDetails.aspx" title="Customer Details" description="Add or edit a customer" />
+		</siteMapNode>
+
+		<siteMapNode url="~/Pages/Vehicles/VehicleList.aspx" title="Vehicles" description="Manage vehicles">
+			<siteMapNode url="~/Pages/Vehicles/VehicleDetails.aspx" title="Vehicle Details" description="Add or edit a vehicle" />
+		</siteMapNode>
+
+		<siteMapNode url="~/Pages/Parts/PartsList.aspx" title="Parts" description="Manage parts inventory">
+			<siteMapNode url="~/Pages/Parts/PartsDetails.aspx" title="Part Details" description="Add or edit a part" />
+		</siteMapNode>
+
+		<siteMapNode url="~/Pages/ServiceCategories/ServiceCategoryList.aspx" title="Service Categories" description="Manage service category hierarchy">
+			<siteMapNode url="~/Pages/ServiceCategories/ServiceCategoryDetails.aspx" title="Category Details" description="Add or edit a category" />
+		</siteMapNode>
+
+		<siteMapNode url="~/Pages/ServiceCatalog/ServiceCatalogList.aspx" title="Service Catalog" description="Manage services offered">
+			<siteMapNode url="~/Pages/ServiceCatalog/ServiceCatalogDetails.aspx" title="Service Details" description="Add or edit a service" />
+		</siteMapNode>
+
+		<siteMapNode url="~/Pages/Technicians/TechnicianDirectory.aspx" title="Technicians" description="Technician directory">
+			<siteMapNode url="~/Pages/Technicians/TechnicianDetails.aspx" title="Technician Details" description="Add or edit a technician" />
+		</siteMapNode>
+
+		<siteMapNode url="~/Pages/JobCards/JobCardList.aspx" title="Job Cards" description="Manage job cards">
+			<siteMapNode url="~/Pages/JobCards/JobCardWizard.aspx" title="New Job Card" description="Create a job card" />
+			<siteMapNode url="~/Pages/JobCards/JobCardStatusBoard.aspx" title="Status Board" description="Live job status board" />
+		</siteMapNode>
+
+		<siteMapNode url="~/Pages/Invoices/InvoiceList.aspx" title="Invoices" description="Manage invoices">
+			<siteMapNode url="~/Pages/Invoices/InvoiceGenerate.aspx" title="Generate Invoice" description="Generate a new invoice" />
+		</siteMapNode>
+
+	</siteMapNode>
+</siteMap>
+
+
+<!--<?xml version="1.0" encoding="utf-8" ?> -->
+<!--<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode url="~/Pages/Dashboard/Dashboard.aspx" title="Dashboard" description="Dashboard">
+        <siteMapNode url="~/Pages/Customers/CustomerList.aspx" title="Customers" description="Customer Management" />
+        <siteMapNode url="~/Pages/Vehicles/VehicleList.aspx" title="Vehicles" description="Vehicle Management" />
+        <siteMapNode url="~/Pages/Parts/PartsList.aspx" title="Parts" description="Parts Management" />
+        <siteMapNode url="~/Pages/Technicians/TechnicianDirectory.aspx" title="Technicians" description="Technician Directory" />
+        <siteMapNode url="~/Pages/JobCards/JobCardList.aspx" title="Job Cards" description="Job Card Management" />
+        <siteMapNode url="~/Pages/Invoices/InvoiceList.aspx" title="Invoices" description="Invoice Management" />
+    </siteMapNode>
+</siteMap>  -->

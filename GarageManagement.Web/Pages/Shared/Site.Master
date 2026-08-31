@@ -1,0 +1,60 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs"
+    Inherits="GarageManagement.Web.Pages.Shared.SiteMaster" %>
+
+<%-- ToolkitScriptManager (not plain ScriptManager) is required because several pages
+     use AJAX Control Toolkit extenders (ModalPopupExtender on JobCardList.aspx,
+     AutoCompleteExtender on customer search). Only one script manager is allowed per
+     page, so it lives here once rather than per-page. --%>
+<!-- <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server">Garage Management System</asp:ContentPlaceHolder></title>
+
+    <link rel="stylesheet" runat="server" href="/Content/CSS/msc-base.css" />
+    <link rel="stylesheet" runat="server" href="/Content/CSS/msc-forms.css" />
+    <link rel="stylesheet" runat="server" href="/Content/CSS/msc-jobcard-wizard.css" />
+    <link rel="stylesheet" runat="server" href="/Content/CSS/msc-dashboard.css" />
+
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+<body>
+    <form id="mainForm" runat="server">
+        
+        <asp:ScriptManager ID="ScriptManager1" runat="server"
+    EnablePartialRendering="true" />
+
+        <header class="msc-header">
+            <div class="msc-header-brand">
+                <asp:HyperLink ID="lnkHome" runat="server" NavigateUrl="~/Pages/Dashboard/Dashboard.aspx"
+                    CssClass="msc-logo">Garage Management System</asp:HyperLink>
+            </div>
+
+            <asp:SiteMapDataSource ID="siteMapDataSource" runat="server" ShowStartingNode="false" />
+            <asp:Menu ID="mainMenu" runat="server" CssClass="msc-menu" Orientation="Horizontal"
+                DataSourceID="siteMapDataSource" StaticDisplayLevels="1" />
+        </header>
+
+        <div class="msc-breadcrumb">
+            <asp:SiteMapPath ID="breadcrumb" runat="server" CssClass="msc-breadcrumb-path"
+                PathSeparator=" / " />
+        </div>
+
+        <main class="msc-main-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </main>
+
+        <footer class="msc-footer">
+            <p>&copy; <%: DateTime.Now.Year %> Garage Management System</p>
+        </footer>
+
+        <%-- jQuery must load before any page-level script that depends on it
+             (jobcard-wizard.js, customer-autocomplete.js, etc.) --%>
+        <script src="/Scripts/jquery-3.7.1.min.js"></script>
+        <asp:ContentPlaceHolder ID="ScriptsContent" runat="server" />
+    </form>
+</body>
+</html>

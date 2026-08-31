@@ -1,0 +1,99 @@
+/* =====================================================================
+   msc-jobcard-wizard.css — asp:Wizard skinning + services checklist +
+   live total + Calendar control
+   ===================================================================== */
+
+/* asp:Wizard renders as a table; CssClass on the control applies to the
+   outer wrapper, so descendant selectors are needed for the inner cells.
+   Deeper structural control (side-bar item styling, per-step borders)
+   would need HeaderStyle/SideBarStyle/StepStyle set server-side — this
+   covers spacing, buttons, and content legibility. */
+
+.msc-jobcard-wizard {
+    width: 100%;
+    background: var(--msc-card);
+    border: 1px solid var(--msc-border);
+    border-radius: 6px;
+    border-collapse: collapse;
+}
+
+    .msc-jobcard-wizard td {
+        vertical-align: top;
+    }
+
+    /* Side-bar cell (first column) */
+    .msc-jobcard-wizard > tbody > tr > td:first-child {
+        background: var(--msc-surface);
+        border-right: 1px solid var(--msc-border);
+        padding: 1.25rem 0;
+        width: 180px;
+    }
+
+    .msc-jobcard-wizard .msc-jobcard-wizard a {
+        font-size: 0.85rem;
+        color: #4A5865;
+        padding: 0.4rem 1.25rem;
+        display: block;
+    }
+
+    /* Step content cell */
+    .msc-jobcard-wizard > tbody > tr > td:last-child {
+        padding: 1.5rem;
+    }
+
+    .msc-jobcard-wizard input[type="button"],
+    .msc-jobcard-wizard input[type="submit"] {
+        padding: 0.5rem 1.1rem;
+        border-radius: 4px;
+        border: 1px solid var(--msc-border);
+        background: var(--msc-steel);
+        color: #FFFFFF;
+        font-family: var(--msc-font-ui);
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 1rem;
+    }
+
+        .msc-jobcard-wizard input[type="button"]:hover,
+        .msc-jobcard-wizard input[type="submit"]:hover {
+            background: var(--msc-steel-dark);
+        }
+
+/* ---- Services checklist (populated by jobcard-wizard.js) ---- */
+
+.msc-checkbox-list {
+    max-height: 260px;
+    overflow-y: auto;
+    border: 1px solid var(--msc-border);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    background: #FFFFFF;
+}
+
+.msc-checkbox-item input[type="checkbox"] {
+    margin-right: 0.4rem;
+}
+
+/* ---- Live total ---- */
+
+.msc-live-total {
+    font-family: var(--msc-font-data);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--msc-signal);
+}
+
+/* ---- Calendar control ---- */
+
+.msc-calendar {
+    border: 1px solid var(--msc-border) !important;
+    border-radius: 6px;
+    font-family: var(--msc-font-ui) !important;
+    font-size: 0.85rem !important;
+    background: #FFFFFF;
+}
+
+    .msc-calendar td {
+        padding: 0.25rem !important;
+    }
