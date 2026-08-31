@@ -368,6 +368,33 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
+        <member name="F:GarageManagement.Web.Pages.JobCards.JobCardWizard.hdnCheckedServiceData">
+            <summary>
+            hdnCheckedServiceData control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.JobCards.JobCardWizard.hdnScheduledDate">
+            <summary>
+            hdnScheduledDate control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.JobCards.JobCardWizard.hdnTechnicianId">
+            <summary>
+            hdnTechnicianId control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
         <member name="F:GarageManagement.Web.Pages.JobCards.JobCardWizard.lblWizardError">
             <summary>
             lblWizardError control.
