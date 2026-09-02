@@ -57,5 +57,10 @@ namespace GarageManagement.Web.BAL
             }
             return list;
         }
+
+        public DataTable GetAllJobCardsForDropdown()
+        {
+            return _dal.GetAllJobCardsForDropdown();
+        }
     }
 }

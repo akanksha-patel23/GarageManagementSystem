@@ -33,22 +33,22 @@ namespace GarageManagement.Web.Pages.Vehicles
         protected global::System.Web.UI.WebControls.TextBox txtRegNumber;
 
         /// <summary>
-        /// txtMake control.
+        /// ddlMake control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtMake;
+        protected global::System.Web.UI.WebControls.DropDownList ddlMake;
 
         /// <summary>
-        /// txtModel control.
+        /// ddlModel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtModel;
+        protected global::System.Web.UI.WebControls.DropDownList ddlModel;
 
         /// <summary>
         /// txtYear control.

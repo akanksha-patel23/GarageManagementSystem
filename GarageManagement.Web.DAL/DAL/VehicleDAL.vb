@@ -16,8 +16,8 @@ Imports System.Data.SqlClient
 ''' </summary>
 Public Class VehicleDAL
 
-    Public Sub InsertVehicle(customerId As Integer, regNumber As String, make As String,
-                              model As String, year As Integer?, vehicleType As String,
+    Public Sub InsertVehicle(customerId As Integer, regNumber As String, makeId As Integer,
+                              modelId As Integer, year As Integer?, vehicleTypeId As Integer?,
                               photoPath As String, ByRef vehicleId As Integer)
         Try
             Using conn As SqlConnection = DBHelper.GetConnection()
@@ -25,10 +25,10 @@ Public Class VehicleDAL
                     cmd.CommandType = CommandType.StoredProcedure
                     cmd.Parameters.Add("@CustomerID", SqlDbType.Int).Value = customerId
                     cmd.Parameters.Add("@RegNumber", SqlDbType.NVarChar, 20).Value = regNumber
-                    cmd.Parameters.Add("@Make", SqlDbType.NVarChar, 50).Value = make
-                    cmd.Parameters.Add("@Model", SqlDbType.NVarChar, 50).Value = model
+                    cmd.Parameters.Add("@MakeID", SqlDbType.Int).Value = makeId
+                    cmd.Parameters.Add("@ModelID", SqlDbType.Int).Value = modelId
                     cmd.Parameters.Add("@Year", SqlDbType.Int).Value = CObj(If(year.HasValue, CType(year.Value, Object), DBNull.Value))
-                    cmd.Parameters.Add("@VehicleType", SqlDbType.NVarChar, 30).Value = CObj(If(vehicleType, DBNull.Value))
+                    cmd.Parameters.Add("@VehicleTypeID", SqlDbType.Int).Value = CObj(If(vehicleTypeId.HasValue, CType(vehicleTypeId.Value, Object), DBNull.Value))
                     cmd.Parameters.Add("@PhotoPath", SqlDbType.NVarChar, 500).Value = CObj(If(photoPath, DBNull.Value))
 
                     Dim vehicleIdParam As SqlParameter = cmd.Parameters.Add("@VehicleID", SqlDbType.Int)
@@ -50,8 +50,8 @@ Public Class VehicleDAL
         End Try
     End Sub
 
-    Public Sub UpdateVehicle(vehicleId As Integer, regNumber As String, make As String,
-                              model As String, year As Integer?, vehicleType As String,
+    Public Sub UpdateVehicle(vehicleId As Integer, regNumber As String, makeId As Integer,
+                              modelId As Integer, year As Integer?, vehicleTypeId As Integer?,
                               photoPath As String)
         Try
             Using conn As SqlConnection = DBHelper.GetConnection()
@@ -59,10 +59,10 @@ Public Class VehicleDAL
                     cmd.CommandType = CommandType.StoredProcedure
                     cmd.Parameters.Add("@VehicleID", SqlDbType.Int).Value = vehicleId
                     cmd.Parameters.Add("@RegNumber", SqlDbType.NVarChar, 20).Value = regNumber
-                    cmd.Parameters.Add("@Make", SqlDbType.NVarChar, 50).Value = make
-                    cmd.Parameters.Add("@Model", SqlDbType.NVarChar, 50).Value = model
+                    cmd.Parameters.Add("@MakeID", SqlDbType.Int).Value = makeId
+                    cmd.Parameters.Add("@ModelID", SqlDbType.Int).Value = modelId
                     cmd.Parameters.Add("@Year", SqlDbType.Int).Value = CObj(If(year.HasValue, CType(year.Value, Object), DBNull.Value))
-                    cmd.Parameters.Add("@VehicleType", SqlDbType.NVarChar, 30).Value = CObj(If(vehicleType, DBNull.Value))
+                    cmd.Parameters.Add("@VehicleTypeID", SqlDbType.Int).Value = CObj(If(vehicleTypeId.HasValue, CType(vehicleTypeId.Value, Object), DBNull.Value))
                     ' Null means "keep the existing photo" — spUpdateVehicle uses COALESCE.
                     cmd.Parameters.Add("@PhotoPath", SqlDbType.NVarChar, 500).Value = CObj(If(photoPath, DBNull.Value))
 
@@ -134,6 +134,84 @@ Public Class VehicleDAL
         Try
             Using conn As SqlConnection = DBHelper.GetConnection()
                 Using cmd As New SqlCommand("spGetAllVehicles", conn)
+                    cmd.CommandType = CommandType.StoredProcedure
+
+                    Dim errorIdParam As SqlParameter = cmd.Parameters.Add("@ErrorID", SqlDbType.Int)
+                    errorIdParam.Direction = ParameterDirection.Output
+
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+
+                    DBHelper.CheckErrorId(cmd)
+                End Using
+            End Using
+        Catch ex As SqlException
+            Throw
+        End Try
+
+        Return dt
+    End Function
+
+    ' ---- Lookup tables (tlkpMake / tlkpModel / tlkpVehicleType) ----
+
+    Public Function GetAllMakes() As DataTable
+        Dim dt As New DataTable()
+
+        Try
+            Using conn As SqlConnection = DBHelper.GetConnection()
+                Using cmd As New SqlCommand("spGetAllMakes", conn)
+                    cmd.CommandType = CommandType.StoredProcedure
+
+                    Dim errorIdParam As SqlParameter = cmd.Parameters.Add("@ErrorID", SqlDbType.Int)
+                    errorIdParam.Direction = ParameterDirection.Output
+
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+
+                    DBHelper.CheckErrorId(cmd)
+                End Using
+            End Using
+        Catch ex As SqlException
+            Throw
+        End Try
+
+        Return dt
+    End Function
+
+    Public Function GetModelsByMake(makeId As Integer) As DataTable
+        Dim dt As New DataTable()
+
+        Try
+            Using conn As SqlConnection = DBHelper.GetConnection()
+                Using cmd As New SqlCommand("spGetModelsByMake", conn)
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.Parameters.Add("@MakeID", SqlDbType.Int).Value = makeId
+
+                    Dim errorIdParam As SqlParameter = cmd.Parameters.Add("@ErrorID", SqlDbType.Int)
+                    errorIdParam.Direction = ParameterDirection.Output
+
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+
+                    DBHelper.CheckErrorId(cmd)
+                End Using
+            End Using
+        Catch ex As SqlException
+            Throw
+        End Try
+
+        Return dt
+    End Function
+
+    Public Function GetAllVehicleTypes() As DataTable
+        Dim dt As New DataTable()
+
+        Try
+            Using conn As SqlConnection = DBHelper.GetConnection()
+                Using cmd As New SqlCommand("spGetAllVehicleTypes", conn)
                     cmd.CommandType = CommandType.StoredProcedure
 
                     Dim errorIdParam As SqlParameter = cmd.Parameters.Add("@ErrorID", SqlDbType.Int)

@@ -13,13 +13,13 @@ namespace GarageManagement.Web.Pages.Invoices
     public partial class InvoiceGenerate
     {
         /// <summary>
-        /// txtJobCardId control.
+        /// ddlJobCardId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtJobCardId;
+        protected global::System.Web.UI.WebControls.DropDownList ddlJobCardId;
 
         /// <summary>
         /// txtTotalAmount control.
@@ -65,5 +65,23 @@ namespace GarageManagement.Web.Pages.Invoices
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMessage;
+
+        /// <summary>
+        /// hfJobCardData control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfJobCardData;
+
+        /// <summary>
+        /// hfTotalAmount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfTotalAmount;
     }
 }

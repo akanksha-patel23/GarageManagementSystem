@@ -1,7 +1,11 @@
 using GarageManagement.Web.BAL;
 using GarageManagement.Web.Entities;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Web.UI;
+using System.Web.UI.WebControls;
+using Newtonsoft.Json;
 
 namespace GarageManagement.Web.Pages.Invoices
 {
@@ -11,18 +15,60 @@ namespace GarageManagement.Web.Pages.Invoices
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                PopulateJobCardDropdown();
+                PopulateJobCardDataForClient();
+            }
+        }
+
+        private void PopulateJobCardDropdown()
+        {
+            DataTable dt = _bal.GetAllJobCardsForDropdown();
+            
+            ddlJobCardId.DataSource = dt;
+            ddlJobCardId.DataBind();
+        }
+
+        private void PopulateJobCardDataForClient()
+        {
+            DataTable dt = _bal.GetAllJobCardsForDropdown();
+            var jobCards = new List<dynamic>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                jobCards.Add(new
+                {
+                    JobCardID = Convert.ToInt32(row["JobCardID"]),
+                    TotalAmount = Convert.ToDecimal(row["TotalAmount"])
+                });
+            }
+
+            hfJobCardData.Value = JsonConvert.SerializeObject(jobCards);
         }
 
         protected void btnGenerate_Click(object sender, EventArgs e)
         {
-            if (!Page.IsValid) return;
+            // Validate job card selection
+            if (string.IsNullOrEmpty(ddlJobCardId.SelectedValue))
+            {
+                ShowMessage("Please select a job card.", isError: true);
+                return;
+            }
+
+            // Validate total amount from hidden field (read-only fields don't postback their values)
+            if (!decimal.TryParse(hfTotalAmount.Value, out decimal totalAmount) || totalAmount < 0)
+            {
+                ShowMessage("Please select a valid job card with a total amount.", isError: true);
+                return;
+            }
 
             try
             {
                 var invoice = new Invoice
                 {
-                    JobCardID = Convert.ToInt32(txtJobCardId.Text),
-                    TotalAmount = Convert.ToDecimal(txtTotalAmount.Text),
+                    JobCardID = Convert.ToInt32(ddlJobCardId.SelectedValue),
+                    TotalAmount = totalAmount,
                     PaymentMode = rblPaymentMode.SelectedValue
                 };
 

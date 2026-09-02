@@ -8,10 +8,18 @@ namespace GarageManagement.Web.Entities
         public int VehicleID { get; set; }
         public int CustomerID { get; set; }
         public string RegNumber { get; set; }
-        public string Make { get; set; }
-        public string Model { get; set; }
+
+        public int MakeID { get; set; }
+        public string MakeName { get; set; }
+
+        public int ModelID { get; set; }
+        public string ModelName { get; set; }
+
         public int? Year { get; set; }
-        public string VehicleType { get; set; }
+
+        public int? VehicleTypeID { get; set; }
+        public string VehicleTypeName { get; set; }
+
         public string PhotoPath { get; set; }
     }
 }

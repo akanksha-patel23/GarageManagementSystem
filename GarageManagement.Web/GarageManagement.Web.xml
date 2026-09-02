@@ -34,6 +34,21 @@
             Entity class for JobStatusHistory
             </summary>
         </member>
+        <member name="T:GarageManagement.Web.Entities.Make">
+            <summary>
+            Entity class for a Vehicle Make (tlkpMake)
+            </summary>
+        </member>
+        <member name="T:GarageManagement.Web.Entities.Model">
+            <summary>
+            Entity class for a Vehicle Model (tlkpModel), scoped to a Make
+            </summary>
+        </member>
+        <member name="T:GarageManagement.Web.Entities.VehicleType">
+            <summary>
+            Entity class for a Vehicle Type (tlkpVehicleType)
+            </summary>
+        </member>
         <member name="T:GarageManagement.Web.Entities.Customer">
             <summary>
             Entity class for Customer
@@ -188,9 +203,9 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
-        <member name="F:GarageManagement.Web.Pages.Invoices.InvoiceGenerate.txtJobCardId">
+        <member name="F:GarageManagement.Web.Pages.Invoices.InvoiceGenerate.ddlJobCardId">
             <summary>
-            txtJobCardId control.
+            ddlJobCardId control.
             </summary>
             <remarks>
             Auto-generated field.
@@ -236,6 +251,24 @@
         <member name="F:GarageManagement.Web.Pages.Invoices.InvoiceGenerate.lblMessage">
             <summary>
             lblMessage control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Invoices.InvoiceGenerate.hfJobCardData">
+            <summary>
+            hfJobCardData control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Invoices.InvoiceGenerate.hfTotalAmount">
+            <summary>
+            hfTotalAmount control.
             </summary>
             <remarks>
             Auto-generated field.
@@ -872,18 +905,18 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
-        <member name="F:GarageManagement.Web.Pages.Vehicles.VehicleDetails.txtMake">
+        <member name="F:GarageManagement.Web.Pages.Vehicles.VehicleDetails.ddlMake">
             <summary>
-            txtMake control.
+            ddlMake control.
             </summary>
             <remarks>
             Auto-generated field.
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
-        <member name="F:GarageManagement.Web.Pages.Vehicles.VehicleDetails.txtModel">
+        <member name="F:GarageManagement.Web.Pages.Vehicles.VehicleDetails.ddlModel">
             <summary>
-            txtModel control.
+            ddlModel control.
             </summary>
             <remarks>
             Auto-generated field.

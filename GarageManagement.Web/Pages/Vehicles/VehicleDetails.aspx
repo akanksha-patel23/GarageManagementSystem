@@ -26,17 +26,24 @@
         </div>
 
         <div class="msc-form-row">
-            <asp:Label runat="server" AssociatedControlID="txtMake" Text="Make" CssClass="msc-label" />
-            <asp:TextBox ID="txtMake" runat="server" CssClass="msc-input" />
-            <asp:RequiredFieldValidator runat="server" ControlToValidate="txtMake"
-                ErrorMessage="Make is required." CssClass="msc-validation-error" Display="Dynamic" />
+            <asp:Label runat="server" AssociatedControlID="ddlMake" Text="Make" CssClass="msc-label" />
+            <asp:DropDownList ID="ddlMake" runat="server" CssClass="msc-input"
+                DataTextField="MakeName" DataValueField="MakeID" AppendDataBoundItems="true"
+                AutoPostBack="true" CausesValidation="false" OnSelectedIndexChanged="ddlMake_SelectedIndexChanged">
+                <asp:ListItem Text="-- Select Make --" Value="" />
+            </asp:DropDownList>
+            <asp:RequiredFieldValidator runat="server" ControlToValidate="ddlMake"
+                InitialValue="" ErrorMessage="Make is required." CssClass="msc-validation-error" Display="Dynamic" />
         </div>
 
         <div class="msc-form-row">
-            <asp:Label runat="server" AssociatedControlID="txtModel" Text="Model" CssClass="msc-label" />
-            <asp:TextBox ID="txtModel" runat="server" CssClass="msc-input" />
-            <asp:RequiredFieldValidator runat="server" ControlToValidate="txtModel"
-                ErrorMessage="Model is required." CssClass="msc-validation-error" Display="Dynamic" />
+            <asp:Label runat="server" AssociatedControlID="ddlModel" Text="Model" CssClass="msc-label" />
+            <asp:DropDownList ID="ddlModel" runat="server" CssClass="msc-input"
+                DataTextField="ModelName" DataValueField="ModelID" AppendDataBoundItems="true">
+                <asp:ListItem Text="-- Select Model --" Value="" />
+            </asp:DropDownList>
+            <asp:RequiredFieldValidator runat="server" ControlToValidate="ddlModel"
+                InitialValue="" ErrorMessage="Model is required." CssClass="msc-validation-error" Display="Dynamic" />
         </div>
 
         <div class="msc-form-row">
@@ -49,14 +56,9 @@
 
         <div class="msc-form-row">
             <asp:Label runat="server" AssociatedControlID="ddlVehicleType" Text="Vehicle Type" CssClass="msc-label" />
-            <asp:DropDownList ID="ddlVehicleType" runat="server" CssClass="msc-input">
-                <asp:ListItem Text="Sedan" Value="Sedan" />
-                <asp:ListItem Text="SUV" Value="SUV" />
-                <asp:ListItem Text="Hatchback" Value="Hatchback" />
-                <asp:ListItem Text="Truck" Value="Truck" />
-                <asp:ListItem Text="Motorcycle" Value="Motorcycle" />
-                <asp:ListItem Text="Sports" Value="Sports" />
-                <asp:ListItem Text="Other" Value="Other" />
+            <asp:DropDownList ID="ddlVehicleType" runat="server" CssClass="msc-input"
+                DataTextField="VehicleTypeName" DataValueField="VehicleTypeID" AppendDataBoundItems="true">
+                <asp:ListItem Text="-- Select Vehicle Type --" Value="" />
             </asp:DropDownList>
         </div>
 

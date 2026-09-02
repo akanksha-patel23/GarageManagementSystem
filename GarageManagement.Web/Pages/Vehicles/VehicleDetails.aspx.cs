@@ -13,7 +13,7 @@ namespace GarageManagement.Web.Pages.Vehicles
         private readonly CustomerBAL _customerBal = new CustomerBAL();
 
         private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png" };
-        private const int MaxPhotoBytes = 5 * 1024 * 1024; // 5 MB � matches 04-webforms-conventions.md
+        private const int MaxPhotoBytes = 5 * 1024 * 1024; // 5 MB — matches 04-webforms-conventions.md
         private const string UploadFolder = "~/Uploads/VehiclePhotos/";
 
         private int? VehicleId
@@ -31,6 +31,8 @@ namespace GarageManagement.Web.Pages.Vehicles
             if (!IsPostBack)
             {
                 BindCustomerDropDown();
+                BindMakeDropDown();
+                BindVehicleTypeDropDown();
 
                 if (VehicleId.HasValue)
                 {
@@ -43,14 +45,17 @@ namespace GarageManagement.Web.Pages.Vehicles
 
                     ddlCustomer.SelectedValue = vehicle.CustomerID.ToString();
                     txtRegNumber.Text = vehicle.RegNumber;
-                    txtMake.Text = vehicle.Make;
-                    txtModel.Text = vehicle.Model;
+
+                    ddlMake.SelectedValue = vehicle.MakeID.ToString();
+                    BindModelDropDown(vehicle.MakeID);
+                    ddlModel.SelectedValue = vehicle.ModelID.ToString();
+
                     txtYear.Text = vehicle.Year?.ToString();
-                    ddlVehicleType.SelectedValue = vehicle.VehicleType ?? "Other";
+                    ddlVehicleType.SelectedValue = vehicle.VehicleTypeID?.ToString() ?? "";
 
                     if (!string.IsNullOrEmpty(vehicle.PhotoPath))
                     {
-                        lblExistingPhoto.Text = "Current photo on file � upload a new one only to replace it.";
+                        lblExistingPhoto.Text = "Current photo on file — upload a new one only to replace it.";
                         lblExistingPhoto.Visible = true;
                     }
                 }
@@ -63,9 +68,41 @@ namespace GarageManagement.Web.Pages.Vehicles
             ddlCustomer.DataBind();
         }
 
+        private void BindMakeDropDown()
+        {
+            ddlMake.DataSource = _vehicleBal.GetAllMakes();
+            ddlMake.DataBind();
+        }
+
+        private void BindVehicleTypeDropDown()
+        {
+            ddlVehicleType.DataSource = _vehicleBal.GetAllVehicleTypes();
+            ddlVehicleType.DataBind();
+        }
+
+        private void BindModelDropDown(int makeId)
+        {
+            ddlModel.DataSource = _vehicleBal.GetModelsByMake(makeId);
+            ddlModel.DataBind();
+        }
+
+        protected void ddlMake_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Model list depends on the selected Make — reset it whenever Make changes.
+            if (int.TryParse(ddlMake.SelectedValue, out int makeId))
+            {
+                BindModelDropDown(makeId);
+            }
+            else
+            {
+                ddlModel.Items.Clear();
+                ddlModel.Items.Add(new ListItem("-- Select Model --", ""));
+            }
+        }
+
         protected void cvPhoto_ServerValidate(object source, ServerValidateEventArgs args)
         {
-            // No file selected is valid � photo is optional, and on Edit the
+            // No file selected is valid — photo is optional, and on Edit the
             // existing PhotoPath is preserved (see spUpdateVehicle's COALESCE).
             if (!fuPhoto.HasFile)
             {
@@ -97,11 +134,11 @@ namespace GarageManagement.Web.Pages.Vehicles
                     VehicleID = VehicleId ?? 0,
                     CustomerID = Convert.ToInt32(ddlCustomer.SelectedValue),
                     RegNumber = txtRegNumber.Text.Trim(),
-                    Make = txtMake.Text.Trim(),
-                    Model = txtModel.Text.Trim(),
+                    MakeID = Convert.ToInt32(ddlMake.SelectedValue),
+                    ModelID = Convert.ToInt32(ddlModel.SelectedValue),
                     Year = string.IsNullOrWhiteSpace(txtYear.Text) ? (int?)null : Convert.ToInt32(txtYear.Text),
-                    VehicleType = ddlVehicleType.SelectedValue,
-                    PhotoPath = photoPath // null on Edit means "keep existing" � handled in spUpdateVehicle
+                    VehicleTypeID = string.IsNullOrEmpty(ddlVehicleType.SelectedValue) ? (int?)null : Convert.ToInt32(ddlVehicleType.SelectedValue),
+                    PhotoPath = photoPath // null on Edit means "keep existing" — handled in spUpdateVehicle
                 };
 
                 if (VehicleId.HasValue)
