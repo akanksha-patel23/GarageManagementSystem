@@ -28,7 +28,7 @@
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="txtPhoneInsert"
                         ErrorMessage="Phone is required." CssClass="msc-validation-error" Display="Dynamic" />
                     <asp:RegularExpressionValidator runat="server" ControlToValidate="txtPhoneInsert"
-                        ValidationExpression="^[0-9+\-\s]{7,20}$" ErrorMessage="Enter a valid phone number."
+                        ValidationExpression="^\+?[0-9\s.\-\(\)]{7,15}$" ErrorMessage="Enter a valid phone number."
                         CssClass="msc-validation-error" Display="Dynamic" />
                 </InsertItemTemplate>
                 <EditItemTemplate>
@@ -36,7 +36,7 @@
                     <asp:RequiredFieldValidator runat="server" ControlToValidate="txtPhoneEdit"
                         ErrorMessage="Phone is required." CssClass="msc-validation-error" Display="Dynamic" />
                     <asp:RegularExpressionValidator runat="server" ControlToValidate="txtPhoneEdit"
-                        ValidationExpression="^[0-9+\-\s]{7,20}$" ErrorMessage="Enter a valid phone number."
+                        ValidationExpression="^\+?[0-9\s.\-\(\)]{7,15}$" ErrorMessage="Enter a valid phone number."
                         CssClass="msc-validation-error" Display="Dynamic" />
                 </EditItemTemplate>
             </asp:TemplateField>

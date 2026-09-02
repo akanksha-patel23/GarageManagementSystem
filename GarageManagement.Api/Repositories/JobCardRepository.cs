@@ -80,6 +80,18 @@ namespace GarageManagement.Api.Repositories
                     CheckErrorId(stockParams); // throws if stock was insufficient (see spUpdatePartStock's RAISERROR)
                 }
 
+                // 4. Persist the computed total — spInsertJobCard hardcodes TotalAmount = 0
+                //    at creation, so without this the row stays at $0.00 forever even
+                //    though this method returns the correct total in its response.
+                var totalParams = new DynamicParameters();
+                totalParams.Add("@JobCardID", jobCardId);
+                totalParams.Add("@TotalAmount", totalAmount);
+                totalParams.Add("@ErrorID", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                await conn.ExecuteAsync("spUpdateJobCardTotal", totalParams,
+                    transaction: transaction, commandType: CommandType.StoredProcedure);
+                CheckErrorId(totalParams);
+
                 transaction.Commit();
 
                 return new JobCardResultDto

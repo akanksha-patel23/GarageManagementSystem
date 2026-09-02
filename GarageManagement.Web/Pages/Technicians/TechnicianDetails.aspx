@@ -20,7 +20,7 @@
             <asp:Label runat="server" AssociatedControlID="txtContactNumber" Text="Contact Number" CssClass="msc-label" />
             <asp:TextBox ID="txtContactNumber" runat="server" CssClass="msc-input" />
             <asp:RegularExpressionValidator runat="server" ControlToValidate="txtContactNumber"
-                ValidationExpression="^[0-9+\-\s]{7,20}$" ErrorMessage="Enter a valid contact number."
+                ValidationExpression="^\+?[0-9\s.\-\(\)]{7,15}$" ErrorMessage="Enter a valid contact number."
                 CssClass="msc-validation-error" Display="Dynamic" />
         </div>
 

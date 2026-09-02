@@ -81,4 +81,29 @@ Public Class InvoiceDAL
         Return dt
     End Function
 
-End Class
+    Public Function GetAllJobCardsForDropdown() As DataTable
+        Dim dt As New DataTable()
+
+        Try
+            Using conn As SqlConnection = DBHelper.GetConnection()
+                Using cmd As New SqlCommand("spGetAllJobCards", conn)
+                    cmd.CommandType = CommandType.StoredProcedure
+
+                    Dim errorIdParam As SqlParameter = cmd.Parameters.Add("@ErrorID", SqlDbType.Int)
+                    errorIdParam.Direction = ParameterDirection.Output
+
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(dt)
+                    End Using
+
+                    DBHelper.CheckErrorId(cmd)
+                End Using
+            End Using
+        Catch ex As SqlException
+            Throw
+        End Try
+
+        Return dt
+    End Function
+
+ End Class
