@@ -22,3 +22,5 @@ secrets.json
 
 # Copilot index junk
 **/CopilotIndices/
+
+GarageManagement.Web/Web.config
