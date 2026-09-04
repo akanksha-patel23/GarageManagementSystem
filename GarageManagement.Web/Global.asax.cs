@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
@@ -16,8 +17,21 @@ namespace GarageManagement.Web
     {
         void Application_Start(object sender, EventArgs e)
         {
-            // Code that runs on application startup
             // Route/bundle registration goes here if introduced later.
+        }
+
+        // FormsAuthentication alone only authenticates the request — it does
+        // NOT automatically populate User.IsInRole() from the ticket's
+        // UserData. Without this, EVERY User.IsInRole("Admin") check (Web.config's
+        // <allow roles="Admin"/> rules AND Web.sitemap's securityTrimmingEnabled)
+        // silently returns false for everyone, including actual admins.
+        protected void Application_AuthenticateRequest(object sender, EventArgs e)
+        {
+            if (Request.IsAuthenticated && Context.User?.Identity is FormsIdentity identity)
+            {
+                string[] roles = identity.Ticket.UserData.Split(',');
+                Context.User = new GenericPrincipal(identity, roles);
+            }
         }
 
         void Application_End(object sender, EventArgs e)
@@ -45,8 +59,7 @@ namespace GarageManagement.Web
             {
                 //EventLog.WriteEntry("GarageManagementWeb", ex.ToString(), EventLogEntryType.Error);
                 System.Diagnostics.EventLog.WriteEntry(
-            "GarageManagementWeb", ex.ToString(),
-            System.Diagnostics.EventLogEntryType.Error);
+            "GarageManagementWeb", ex.ToString(), System.Diagnostics.EventLogEntryType.Error);
             }
             catch
             {

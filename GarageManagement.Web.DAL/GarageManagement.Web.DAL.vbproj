@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="DAL\DBHelper.vb" />
     <Compile Include="DAL\CustomerDAL.vb" />
+    <Compile Include="DAL\UserDAL.vb" />
     <Compile Include="DAL\VehicleDAL.vb" />
     <Compile Include="DAL\ServiceCategoryDAL.vb" />
     <Compile Include="DAL\ServiceCatalogDAL.vb" />
@@ -61,5 +62,5 @@
     </ItemGroup>
     <Copy SourceFiles="%(PackageReference.Identity)" DestinationFolder="$(OutputPath)" Condition="'%(PackageReference.Identity)' == 'Microsoft.Data.SqlClient'" />
   </Target>-->
-  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" /> 
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -124,6 +124,8 @@
     <Content Include="Default.aspx" />
     <Content Include="GarageManagement.Web.xml" />
     <Content Include="Global.asax" />
+    <Content Include="Login.aspx" />
+    <Content Include="Logout.aspx" />
     <Content Include="obj\Debug\GarageManagement.Web.csproj.FileListAbsolute.txt" />
     <Content Include="obj\Debug\GarageManagement.Web.dll" />
     <Content Include="obj\Debug\GarageManagement.Web.pdb" />
@@ -144,8 +146,12 @@
     <Content Include="Pages\Shared\Error.aspx" />
     <Content Include="Pages\Technicians\TechnicianDetails.aspx" />
     <Content Include="Pages\Technicians\TechnicianDirectory.aspx" />
+    <Content Include="Pages\Users\UserDetails.aspx" />
+    <Content Include="Pages\Users\UserList.aspx" />
     <Content Include="Pages\Vehicles\VehicleDetails.aspx" />
     <Content Include="Pages\Vehicles\VehicleList.aspx" />
+    <Content Include="passwordHash_PBKDF.txt" />
+    <Content Include="Register.aspx" />
     <Content Include="Scripts\customer-autocomplete.js" />
     <Content Include="Scripts\dashboard.js" />
     <Content Include="Scripts\jobcard-status.js" />
@@ -162,6 +168,7 @@
     <Compile Include="BAL\ServiceCatalogBAL.cs" />
     <Compile Include="BAL\ServiceCategoryBAL.cs" />
     <Compile Include="BAL\TechnicianBAL.cs" />
+    <Compile Include="BAL\UserBAL.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -172,6 +179,7 @@
     <Compile Include="Entities\JobStatusHistory.cs" />
     <Compile Include="Entities\Make.cs" />
     <Compile Include="Entities\Model.cs" />
+    <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\VehicleType.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -188,6 +196,20 @@
     <Compile Include="Entities\ServiceCategory.cs" />
     <Compile Include="Entities\Technician.cs" />
     <Compile Include="Entities\Invoice.cs" />
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Logout.aspx.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Logout.aspx.designer.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+    </Compile>
     <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
     <Compile Include="Pages\Customers\CustomerDetails.aspx.cs">
       <DependentUpon>CustomerDetails.aspx</DependentUpon>
@@ -291,6 +313,9 @@
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="Pages\Shared\Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Technicians\TechnicianDetails.aspx.cs">
       <DependentUpon>TechnicianDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -312,6 +337,20 @@
     <Compile Include="Pages\Parts\PartsDetails.aspx.designer.cs">
       <DependentUpon>PartsDetails.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Users\UserDetails.aspx.cs">
+      <DependentUpon>UserDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Users\UserDetails.aspx.designer.cs">
+      <DependentUpon>UserDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Users\UserList.aspx.cs">
+      <DependentUpon>UserList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Users\UserList.aspx.designer.cs">
+      <DependentUpon>UserList.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Vehicles\VehicleDetails.aspx.cs">
       <DependentUpon>VehicleDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -325,6 +364,13 @@
     </Compile>
     <Compile Include="Pages\Vehicles\VehicleList.aspx.designer.cs">
       <DependentUpon>VehicleList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Register.aspx.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Register.aspx.designer.cs">
+      <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -340,7 +386,7 @@
     <Content Include="obj\Debug\GarageManagement.Web.csproj.CoreCompileInputs.cache" />
     <None Include="packages.config" />
     <Content Include="Pages\Shared\Site.Master" />
-    <Content Include="Pages\Shared\Web.sitemap" />
+    <Content Include="Web.sitemap" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.1.min.map" />
   </ItemGroup>

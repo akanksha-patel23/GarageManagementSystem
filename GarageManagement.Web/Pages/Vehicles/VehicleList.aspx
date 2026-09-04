@@ -16,10 +16,10 @@
         <Columns>
             <asp:BoundField DataField="VehicleID" HeaderText="ID" />
             <asp:BoundField DataField="RegNumber" HeaderText="Reg. Number" />
-            <asp:BoundField DataField="Make" HeaderText="Make" />
-            <asp:BoundField DataField="Model" HeaderText="Model" />
+            <asp:BoundField DataField="MakeName" HeaderText="Make" />
+            <asp:BoundField DataField="ModelName" HeaderText="Model" />
             <asp:BoundField DataField="Year" HeaderText="Year" />
-            <asp:BoundField DataField="VehicleType" HeaderText="Type" />
+            <asp:BoundField DataField="VehicleTypeName" HeaderText="Type" />
             <asp:TemplateField HeaderText="Photo">
                 <ItemTemplate>
                     <asp:HyperLink runat="server"

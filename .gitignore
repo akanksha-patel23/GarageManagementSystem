@@ -24,3 +24,5 @@ secrets.json
 **/CopilotIndices/
 
 GarageManagement.Web/Web.config
+
+passwordHash_PBKDF.txt

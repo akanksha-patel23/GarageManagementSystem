@@ -1,5 +1,6 @@
 using GarageManagement.Web.BAL;
 using System;
+using System.Web.UI;
 
 namespace GarageManagement.Web.Pages.JobCards
 {
@@ -21,8 +22,14 @@ namespace GarageManagement.Web.Pages.JobCards
         {
             if (!JobCardId.HasValue)
             {
-                ShowMessage("No JobCardID specified.", isError: true);
-                statusTimer.Enabled = false;
+                //ShowMessage("No JobCardID specified.", isError: true);
+                //statusTimer.Enabled = false;
+
+                // The Web.sitemap links to this page without a query string so
+                // users can reach it from the menu. Redirect to the job card list
+                // rather than stranding them on a blank error page — they can
+                // then click through to a specific card's status board from there.
+                Response.Redirect("~/Pages/JobCards/JobCardList.aspx");
                 return;
             }
 

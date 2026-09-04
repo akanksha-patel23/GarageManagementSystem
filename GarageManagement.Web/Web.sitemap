@@ -22,6 +22,10 @@
 			<siteMapNode url="~/Pages/ServiceCatalog/ServiceCatalogDetails.aspx" title="Service Details" description="Add or edit a service" />
 		</siteMapNode>
 
+		<siteMapNode url="~/Pages/Users/UserList.aspx" title="Users" description="Manage user accounts" roles="Admin">
+			<siteMapNode url="~/Pages/Users/UserDetails.aspx" title="User Details" description="Add a user" roles="Admin" />
+		</siteMapNode>
+
 		<siteMapNode url="~/Pages/Technicians/TechnicianDirectory.aspx" title="Technicians" description="Technician directory">
 			<siteMapNode url="~/Pages/Technicians/TechnicianDetails.aspx" title="Technician Details" description="Add or edit a technician" />
 		</siteMapNode>

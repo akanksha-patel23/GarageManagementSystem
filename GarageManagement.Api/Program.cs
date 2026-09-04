@@ -1,6 +1,9 @@
 using GarageManagement.Api.Repositories;
 using GarageManagement.Api.Services;
-using System.Runtime.ConstrainedExecution;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,34 @@ builder.Services.AddCors(options =>
     });
 });
 
+// JWT authentication — issued by AuthController.Login, consumed by every other
+// endpoint. FallbackPolicy below requires an authenticated user by default on
+// every action; AuthController.Login is the sole [AllowAnonymous] exception.
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 // --- Dapper repositories and services -------------------------------------
 // Uncomment each pair as that feature area's Repository/Service classes are
 // actually built (per full-solution-file-scaffold.md). 
@@ -37,18 +68,22 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 //
- builder.Services.AddScoped<IServiceCatalogRepository, ServiceCatalogRepository>();
+builder.Services.AddScoped<IServiceCatalogRepository, ServiceCatalogRepository>();
 builder.Services.AddScoped<IServiceCatalogService, ServiceCatalogService>();
 //
 builder.Services.AddScoped<IJobCardRepository, JobCardRepository>();
 builder.Services.AddScoped<IJobCardService, JobCardService>();
 //
- builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// In Development, show the full exception (stack trace, message) so errors
+// like a bad connection string or a missing stored procedure are actually
+// visible instead of a generic ProblemDetails response. Production keeps the
+// clean ProblemDetails-only behavior per 03-error-handling.md.
+
 if (app.Environment.IsDevelopment())
 {
     //app.UseSwagger();
@@ -65,9 +100,9 @@ else
 //app.UseExceptionHandler();
 //app.UseStatusCodePages();
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseCors(WebOriginPolicy);
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

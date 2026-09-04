@@ -4,6 +4,15 @@
         <name>GarageManagement.Web</name>
     </assembly>
     <members>
+        <member name="M:GarageManagement.Web.BAL.UserBAL.VerifyLogin(System.String,System.String)">
+            <summary>
+            Verifies credentials against tblUsers. Returns the matched User (with
+            PasswordHash/Salt cleared) on success, or null on any failure —
+            unknown username, wrong password, and inactive account all return the
+            same null result so login pages can't distinguish "wrong password"
+            from "unknown user" (avoids username enumeration).
+            </summary>
+        </member>
         <member name="T:GarageManagement.Web.BAL.CustomerBAL">
             <summary>
             Business rules for Customers. Also owns DataTable -> Customer mapping,
@@ -94,6 +103,51 @@
             Global Application Class
             Handles application-level events and settings
             </summary>
+        </member>
+        <member name="F:GarageManagement.Web.Login.loginForm">
+            <summary>
+            loginForm control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Login.txtUsername">
+            <summary>
+            txtUsername control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Login.txtPassword">
+            <summary>
+            txtPassword control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Login.btnLogin">
+            <summary>
+            btnLogin control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Login.lblMessage">
+            <summary>
+            lblMessage control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
         </member>
         <member name="F:GarageManagement.Web.Pages.Customers.CustomerDetails.dvCustomer">
             <summary>
@@ -806,6 +860,123 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.TitleContent">
+            <summary>
+            TitleContent control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.HeadContent">
+            <summary>
+            HeadContent control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.mainForm">
+            <summary>
+            mainForm control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.ScriptManager1">
+            <summary>
+            ScriptManager1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.lnkHome">
+            <summary>
+            lnkHome control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.siteMapDataSource">
+            <summary>
+            siteMapDataSource control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.mainMenu">
+            <summary>
+            mainMenu control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.lblLoggedInAs">
+            <summary>
+            lblLoggedInAs control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.lnkLogout">
+            <summary>
+            lnkLogout control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.hdnJwtToken">
+            <summary>
+            hdnJwtToken control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.breadcrumb">
+            <summary>
+            breadcrumb control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.MainContent">
+            <summary>
+            MainContent control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Shared.SiteMaster.ScriptsContent">
+            <summary>
+            ScriptsContent control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
         <member name="F:GarageManagement.Web.Pages.Technicians.TechnicianDetails.txtName">
             <summary>
             txtName control.
@@ -879,6 +1050,96 @@
             </remarks>
         </member>
         <member name="F:GarageManagement.Web.Pages.Technicians.TechnicianDirectory.lblMessage">
+            <summary>
+            lblMessage control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Users.UserDetails.txtUsername">
+            <summary>
+            txtUsername control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Users.UserDetails.txtFullName">
+            <summary>
+            txtFullName control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Users.UserDetails.txtPassword">
+            <summary>
+            txtPassword control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Users.UserDetails.rblRole">
+            <summary>
+            rblRole control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Users.UserDetails.btnSave">
+            <summary>
+            btnSave control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Users.UserDetails.valSummary">
+            <summary>
+            valSummary control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Users.UserDetails.lblMessage">
+            <summary>
+            lblMessage control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Users.UserList.lnkAddNew">
+            <summary>
+            lnkAddNew control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Users.UserList.gvUsers">
+            <summary>
+            gvUsers control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Pages.Users.UserList.lblMessage">
             <summary>
             lblMessage control.
             </summary>
@@ -1014,6 +1275,69 @@
             </remarks>
         </member>
         <member name="F:GarageManagement.Web.Pages.Vehicles.VehicleList.lblMessage">
+            <summary>
+            lblMessage control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Register.registerForm">
+            <summary>
+            registerForm control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Register.txtUsername">
+            <summary>
+            txtUsername control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Register.txtFullName">
+            <summary>
+            txtFullName control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Register.txtPassword">
+            <summary>
+            txtPassword control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Register.txtConfirmPassword">
+            <summary>
+            txtConfirmPassword control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Register.btnRegister">
+            <summary>
+            btnRegister control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:GarageManagement.Web.Register.lblMessage">
             <summary>
             lblMessage control.
             </summary>

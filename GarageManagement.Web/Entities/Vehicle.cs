@@ -22,4 +22,16 @@ namespace GarageManagement.Web.Entities
 
         public string PhotoPath { get; set; }
     }
+    public class VehicleMake
+    {
+        public int MakeID { get; set; }
+        public string MakeName { get; set; }
+    }
+
+    public class VehicleModel
+    {
+        public int ModelID { get; set; }
+        public int MakeID { get; set; }
+        public string ModelName { get; set; }
+    }
 }

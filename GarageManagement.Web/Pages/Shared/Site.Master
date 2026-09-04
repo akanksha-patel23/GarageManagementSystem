@@ -36,7 +36,17 @@
             <asp:SiteMapDataSource ID="siteMapDataSource" runat="server" ShowStartingNode="false" />
             <asp:Menu ID="mainMenu" runat="server" CssClass="msc-menu" Orientation="Horizontal"
                 DataSourceID="siteMapDataSource" StaticDisplayLevels="1" />
+
+             <div class="msc-user-status">
+                <asp:Label ID="lblLoggedInAs" runat="server" CssClass="msc-user-label" />
+                <asp:HyperLink ID="lnkLogout" runat="server" NavigateUrl="~/Logout.aspx" CssClass="msc-link">Logout</asp:HyperLink>
+            </div>
         </header>
+
+         <%-- Read by jobcard-wizard.js (and any other AJAX script) to attach
+             Authorization: Bearer <token> to API calls, since every controller
+             now requires [Authorize]. Populated from Session in Site.Master.cs. --%>
+        <input type="hidden" id="hdnJwtToken" runat="server" ClientIDMode="Static" />
 
         <div class="msc-breadcrumb">
             <asp:SiteMapPath ID="breadcrumb" runat="server" CssClass="msc-breadcrumb-path"
@@ -52,7 +62,9 @@
         </footer>
 
         <%-- jQuery must load before any page-level script that depends on it
-             (jobcard-wizard.js, customer-autocomplete.js, etc.) --%>
+             (jobcard-wizard.js, customer-autocomplete.js, etc.). Root-absolute
+             path — this site is always hosted at the domain root, and a plain
+             "~/" without runat="server" silently 404s. --%>
         <script src="/Scripts/jquery-3.7.1.min.js"></script>
         <asp:ContentPlaceHolder ID="ScriptsContent" runat="server" />
     </form>

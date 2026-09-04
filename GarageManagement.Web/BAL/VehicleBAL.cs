@@ -52,12 +52,13 @@ namespace GarageManagement.Web.BAL
 
         // ---- Lookup tables (tlkpMake / tlkpModel / tlkpVehicleType) ----
 
-        public List<Make> GetAllMakes()
+        public List<VehicleMake> GetAllMakes()
         {
-            var list = new List<Make>();
-            foreach (DataRow row in _dal.GetAllMakes().Rows)
+            DataTable dt = _dal.GetAllMakes();
+            var list = new List<VehicleMake>();
+            foreach (DataRow row in dt.Rows)
             {
-                list.Add(new Make
+                list.Add(new VehicleMake
                 {
                     MakeID = Convert.ToInt32(row["MakeID"]),
                     MakeName = row["MakeName"].ToString()
@@ -66,12 +67,13 @@ namespace GarageManagement.Web.BAL
             return list;
         }
 
-        public List<Model> GetModelsByMake(int makeId)
+        public List<VehicleModel> GetModelsByMake(int makeId)
         {
-            var list = new List<Model>();
-            foreach (DataRow row in _dal.GetModelsByMake(makeId).Rows)
+            DataTable dt = _dal.GetModelsByMake(makeId);
+            var list = new List<VehicleModel>();
+            foreach (DataRow row in dt.Rows)
             {
-                list.Add(new Model
+                list.Add(new VehicleModel
                 {
                     ModelID = Convert.ToInt32(row["ModelID"]),
                     MakeID = Convert.ToInt32(row["MakeID"]),
@@ -83,8 +85,9 @@ namespace GarageManagement.Web.BAL
 
         public List<VehicleType> GetAllVehicleTypes()
         {
+            DataTable dt = _dal.GetAllVehicleTypes();
             var list = new List<VehicleType>();
-            foreach (DataRow row in _dal.GetAllVehicleTypes().Rows)
+            foreach (DataRow row in dt.Rows)
             {
                 list.Add(new VehicleType
                 {
@@ -109,16 +112,20 @@ namespace GarageManagement.Web.BAL
                 throw new ArgumentException("Registration number is required.");
 
             if (vehicle.MakeID <= 0)
-                throw new ArgumentException("A make must be selected.");
+                throw new ArgumentException("Make is required.");
 
             if (vehicle.ModelID <= 0)
-                throw new ArgumentException("A model must be selected.");
+                throw new ArgumentException("Model is required.");
 
             if (vehicle.Year.HasValue && (vehicle.Year < 1980 || vehicle.Year > DateTime.Now.Year + 1))
                 throw new ArgumentException("Year is out of range.");
         }
 
         // ---- Mapping ----
+        // Column names below match spGetAllVehicles/spGetVehicleById exactly:
+        // MakeID, MakeName, ModelID, ModelName, VehicleTypeID, VehicleTypeName
+        // (joined from tlkpMake/tlkpModel/tlkpVehicleType) — NOT "Make"/"Model"/
+        // "VehicleType", which don't exist as columns anymore.
 
         private Vehicle MapRowToVehicle(DataRow row)
         {

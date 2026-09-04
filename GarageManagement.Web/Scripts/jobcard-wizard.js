@@ -7,6 +7,18 @@
 $(function () {
     var apiBaseUrl = $('#hdnApiBaseUrl').val();
 
+    var jwtToken = $('#hdnJwtToken').val();
+
+    // Attaches Authorization: Bearer <token> to every AJAX call this file
+    // makes, since Program.cs now requires [Authorize] on every controller.
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+            if (jwtToken) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + jwtToken);
+            }
+        }
+    });
+
     function populateVehicles(customerId, restoreVehicleId) {
         var $vehicleDropdown = $('#ddlVehicle');
         $vehicleDropdown.empty();

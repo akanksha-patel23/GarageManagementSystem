@@ -30,7 +30,19 @@ namespace GarageManagement.Web.Pages.Dashboard
         {
             try
             {
-                HttpResponseMessage response = await httpClient.GetAsync("/api/dashboard/stats");
+                //HttpResponseMessage response = await httpClient.GetAsync("/api/dashboard/stats");
+                // Built per-request rather than setting httpClient.DefaultRequestHeaders
+                // — the client is a shared static instance across all sessions, and
+                // setting a default header on it would be a race condition between
+                // concurrent users with different tokens.
+                var request = new HttpRequestMessage(HttpMethod.Get, "/api/dashboard/stats");
+                string token = Session["JwtToken"] as string;
+                if (!string.IsNullOrEmpty(token))
+                {
+                    request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                }
+
+                HttpResponseMessage response = await httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
                 string json = await response.Content.ReadAsStringAsync();

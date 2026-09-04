@@ -99,6 +99,18 @@ a {
         opacity: 0.9;
     }
 
+.msc-user-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #D7DEE5;
+    font-size: 0.85rem;
+}
+
+    .msc-user-status .msc-link {
+        color: #D7DEE5;
+    }
+
 /* ---- Menu (asp:Menu) ---- */
 
 .msc-menu, .msc-menu table {
