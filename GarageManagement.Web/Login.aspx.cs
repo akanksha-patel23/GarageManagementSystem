@@ -1,16 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using GarageManagement.Web.BAL;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using GarageManagement.Web.BAL;
 
 namespace GarageManagement.Web
 {
@@ -18,12 +15,37 @@ namespace GarageManagement.Web
     {
         private readonly UserBAL _userBal = new UserBAL();
 
-        private static readonly HttpClient httpClient = new HttpClient
+        // Static HttpClient is intentional — one instance per AppDomain avoids
+        // socket exhaustion. BaseAddress is set once at initialisation time from
+        // the same appSetting that every other server-side caller uses.
+        private static readonly HttpClient _httpClient = new HttpClient
         {
-            BaseAddress = new Uri(ConfigurationManager.AppSettings["ApiBaseUrl"])
+            BaseAddress = new Uri(ConfigurationManager.AppSettings["ApiBaseUrl"]),
+            // Give the API call a hard ceiling so a slow/unreachable API never
+            // stalls the login page for the full IIS request-processing timeout.
+            Timeout = TimeSpan.FromSeconds(10)
         };
 
-        protected async void btnLogin_Click(object sender, EventArgs e)
+        // -----------------------------------------------------------------------
+        // NOT async void — that was the root cause of Session["JwtToken"] always
+        // being null.
+        //
+        // async void event handlers in WebForms yield the thread at the first
+        // await, the ASP.NET pipeline continues without waiting for the
+        // continuation, and Response.Redirect (or the pipeline itself ending the
+        // request) aborts the thread before the continuation can resume. The
+        // runtime then throws ThreadAbortException inside
+        // InvokeCancellableCallback, which catch(Exception) silently swallows and
+        // sets the token to null on every single login.
+        //
+        // Fix: make the handler synchronous (void, no await). The HTTP call to
+        // the API runs on a ThreadPool thread via Task.Run — that thread carries
+        // no ASP.NET SynchronizationContext, so ConfigureAwait(false) inside it
+        // is safe and there is no deadlock risk. GetAwaiter().GetResult() blocks
+        // the current request thread (which is fine — it is already blocked
+        // waiting for the page to render anyway) until the HTTP call completes.
+        // -----------------------------------------------------------------------
+        protected void btnLogin_Click(object sender, EventArgs e)
         {
             if (!Page.IsValid) return;
 
@@ -34,47 +56,70 @@ namespace GarageManagement.Web
                 return;
             }
 
-            // FormsAuthentication ticket drives Web.config's page-level
-            // <authorization> rules. Role travels in UserData so BasePage-style
-            // checks (and Web.sitemap's securityTrimmingEnabled) can read it
-            // without a second database round trip on every page.
+            // FormsAuthentication ticket — Role in UserData for
+            // Application_AuthenticateRequest in Global.asax to rebuild
+            // GenericPrincipal so User.IsInRole() and Web.config's
+            // <allow roles="Admin"/> rules both work.
             var ticket = new FormsAuthenticationTicket(
-                1, user.Username, DateTime.Now, DateTime.Now.AddHours(8), false, user.Role);
-            string encryptedTicket = FormsAuthentication.Encrypt(ticket);
-            var authCookie = new System.Web.HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-            Response.Cookies.Add(authCookie);
+                version: 1,
+                name: user.Username,
+                issueDate: DateTime.Now,
+                expiration: DateTime.Now.AddHours(8),
+                isPersistent: false,
+                userData: user.Role);
+
+            Response.Cookies.Add(new HttpCookie(
+                FormsAuthentication.FormsCookieName,
+                FormsAuthentication.Encrypt(ticket)));
 
             Session["FullName"] = user.FullName;
             Session["Role"] = user.Role;
 
-            // Also obtain a JWT from the API so jobcard-wizard.js (and any other
-            // browser-side AJAX) can call the now-[Authorize]-protected API
-            // endpoints. This is a second, independent verification against the
-            // same tblUsers row — kept separate rather than passing a shared
-            // secret between layers, consistent with how every other table in
-            // this project is read independently by both the Web Forms DAL and
-            // the API's own repositories.
+            // Capture form values now — TextBox controls may not be accessible
+            // after the response pipeline moves on.
+            string username = txtUsername.Text.Trim();
+            string password = txtPassword.Text;
+
+            // Obtain a JWT so browser-side AJAX in jobcard-wizard.js can reach
+            // the [Authorize]-protected API endpoints. Runs synchronously on a
+            // ThreadPool thread to guarantee Session["JwtToken"] is written
+            // before Response.Redirect fires — the async void approach was
+            // causing ThreadAbortException to abort the continuation every time.
             try
             {
-                var payload = new { username = txtUsername.Text.Trim(), password = txtPassword.Text };
-                var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await httpClient.PostAsync("/api/auth/login", content);
+                string token = Task.Run(async () =>
+                {
+                    var body = new StringContent(
+                        JsonConvert.SerializeObject(new { username, password }),
+                        Encoding.UTF8, "application/json");
 
-                if (response.IsSuccessStatusCode)
-                {
-                    string json = await response.Content.ReadAsStringAsync();
-                    var result = JObject.Parse(json);
-                    Session["JwtToken"] = result["token"]?.ToString();
-                }
-                else
-                {
-                    // Page navigation still works via FormsAuth even if this fails —
-                    // only AJAX-driven features (the wizard) would be degraded.
-                    Session["JwtToken"] = null;
-                }
+                    // ConfigureAwait(false): the continuation inside Task.Run
+                    // must NOT try to resume on the ASP.NET sync context — there
+                    // is none on a ThreadPool thread, and attempting to capture it
+                    // would deadlock.
+                    HttpResponseMessage resp = await _httpClient
+                        .PostAsync("/api/auth/login", body)
+                        .ConfigureAwait(false);
+
+                    if (!resp.IsSuccessStatusCode) return null;
+
+                    string json = await resp.Content
+                        .ReadAsStringAsync()
+                        .ConfigureAwait(false);
+
+                    return JObject.Parse(json)["token"]?.ToString();
+
+                }).GetAwaiter().GetResult();   // blocks until the Task.Run lambda completes
+
+                Session["JwtToken"] = token;
             }
-            catch
+            catch (Exception ex)
             {
+                // Token acquisition failed — page navigation still works via
+                // FormsAuth; only browser-side AJAX (the wizard) would be
+                // degraded. Log so the cause is visible without crashing login.
+                System.Diagnostics.Trace.TraceWarning(
+                    "GarageManagement: POST /api/auth/login failed during login. " + ex.Message);
                 Session["JwtToken"] = null;
             }
 

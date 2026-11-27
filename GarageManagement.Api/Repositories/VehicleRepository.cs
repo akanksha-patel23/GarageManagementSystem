@@ -30,9 +30,9 @@ namespace GarageManagement.Api.Repositories
             parameters.Add("@ErrorID", dbType: System.Data.DbType.Int32, direction: System.Data.ParameterDirection.Output);
 
             var result = await conn.QueryAsync<VehicleDto>(
-                "spGetVehiclesByCustomer",
+                "spGetVehiclesBfyCustomer",
                 parameters,
-                commandType: System.Data.CommandType.StoredProcedure);
+                commandType: CommandType.StoredProcedure);
 
             int errorId = parameters.Get<int>("@ErrorID");
             if (errorId != 0)
